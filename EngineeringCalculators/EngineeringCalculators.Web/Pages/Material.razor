@@ -5,13 +5,13 @@
 
 
 <div class="container">
-    <h3 class="text-center">Material</h3>
+    <h1 class="text-center">Materials Database</h1>
 
     @* Grid *@
     <div class="row">
 
         @* Displays on the left side*@
-        <div class="col-lg-6 " >
+        <div class="col-lg-6">
             <fieldset style="border-radius: 5px">
                 <legend class="text-center">Material List</legend>
 
@@ -22,37 +22,46 @@
                     </div>
                     <div class="col" style="text-align:center">
                         <button @onclick=(HandleNewMaterial) type="button" class="btn btn-primary">New Material</button>
-                    </div>                    
+                    </div>
                 </div>
 
-                @* Displays a table of available material *@
-                <div class="row p-3" >
-                    <table class="table table-bordered" style="width: 100%">
-                        <thead class="text-center">
-                            <tr>
-                                <th>Material</th>
-                                <th>Category</th>
-                                @* <th></th> *@
-                                @* <th></th> *@
-                            </tr>                            
-                        </thead>
+                <hr />
 
-                        @if (_materials.Count > 0)
-                        {
-                            <tbody >
-                            @foreach(MaterialModel material in _materials)
+                @* Displays a table of available material *@
+
+                <div class="row pt-3 ps-3 pe-3">
+                    <div class="fs-4" style="display: flex; justify-content: space-evenly; background-color: darkslateblue; color: white">
+                        <div>Material</div>
+                        <div>Category</div>
+                    </div>
+                    @* <table class="table table-bordered" style="width: 100%; "> *@
+                    @*     <thead class="text-center table-primary"> *@
+                    @*         <tr> *@
+                    @*             <th style="width:50%">Material</th> *@
+                    @*             <th style="width:50%">Category</th> *@
+                    @*             @* <th></th> *@
+                    @*             @* <th></th> *@
+                    @*         </tr> *@
+                    @*     </thead> *@
+                    @* </table> *@
+                    <div style=" max-height:60vh; overflow:auto">
+                        <table class="table table-bordered table-hover" style="width: 100%;">
+                            @if (_materials.Count > 0)
                             {
-                                    <tr @onclick="(() => HandleSelectedMaterial(material))">
-                                        <td style="vertical-align: middle">@material.Name</td>
-                                        <td style="vertical-align: middle">@material.Category</td>
-                                        @* <td class="text-center" style="vertical-align: middle"><button class="btn btn-primary btn-sm">Edit</button></td> *@
-                                        @* <td class="text-center" style="vertical-align: middle"><button class="btn btn-danger btn-sm">Delete</button></td> *@
-                                    </tr>
-                            }                            
-                        </tbody>
-                        }
-                        
-                    </table>
+                                <tbody>
+                                    @foreach (MaterialModel material in _materials)
+                                    {
+                                        <tr @onclick="(() => HandleSelectedMaterial(material))">
+                                            <td style="vertical-align: middle; width:50%">@material.Name</td>
+                                            <td style="vertical-align: middle; width:50%">@material.Category</td>
+                                            @* <td class="text-center" style="vertical-align: middle"><button class="btn btn-primary btn-sm">Edit</button></td> *@
+                                            @* <td class="text-center" style="vertical-align: middle"><button class="btn btn-danger btn-sm">Delete</button></td> *@
+                                        </tr>
+                                    }
+                                </tbody>
+                            }
+                        </table>
+                    </div>
 
                 </div>
             </fieldset>
@@ -60,15 +69,25 @@
 
 
         @* Displays on the right side*@
-        <div class="col" >
+        <div class="col">
             <fieldset style="border-radius: 5px">
                 <legend class="text-center">Selected Material Data</legend>
-                <div style="padding: 10px">
-                    <MaterialDataComponent MaterialData="_material" OnSave="(material) => HandleSaveAsync(material)"></MaterialDataComponent>
+
+                @if (_material.Id > 0 && _canSave == false)
+                {
+                    <div style="text-align:center; display: flex; justify-content:space-evenly">
+                        <button @onclick="HandleEdit" type="button" class="btn btn-primary">Edit</button>
+                        <button type="button" class="btn btn-danger">Delete</button>
+                    </div>
+                }
+
+
+                <div style="padding: 10px; ">
+                    <MaterialDataComponent MaterialData="_material" CanSave="_canSave" Disabled="_disabled" OnSave="(material) => HandleSaveAsync(material)"></MaterialDataComponent>
                 </div>
             </fieldset>
         </div>
     </div>
-    
+
 </div>
 

@@ -83,7 +83,6 @@ namespace EngineeringCalculators.Web.Services
         {
             List<MaterialModel> materials = [];
             _fileText = "";
-            FileHandle = null;
 
             try
             {
