@@ -1,0 +1,74 @@
+﻿@page "/material"
+
+<PageTitle>Materials</PageTitle>
+
+
+
+<div class="container">
+    <h3 class="text-center">Material</h3>
+
+    @* Grid *@
+    <div class="row">
+
+        @* Displays on the left side*@
+        <div class="col-lg-6 " >
+            <fieldset style="border-radius: 5px">
+                <legend class="text-center">Material List</legend>
+
+
+                <div class="row p-3">
+                    <div class="col-6" style="text-align:center">
+                        <button @onclick=(HandleLoadingMaterialAsync) type="button" class="btn btn-primary">Load Material</button>
+                    </div>
+                    <div class="col" style="text-align:center">
+                        <button @onclick=(HandleNewMaterial) type="button" class="btn btn-primary">New Material</button>
+                    </div>                    
+                </div>
+
+                @* Displays a table of available material *@
+                <div class="row p-3" >
+                    <table class="table table-bordered" style="width: 100%">
+                        <thead class="text-center">
+                            <tr>
+                                <th>Material</th>
+                                <th>Category</th>
+                                @* <th></th> *@
+                                @* <th></th> *@
+                            </tr>                            
+                        </thead>
+
+                        @if (_materials.Count > 0)
+                        {
+                            <tbody >
+                            @foreach(MaterialModel material in _materials)
+                            {
+                                    <tr @onclick="(() => HandleSelectedMaterial(material))">
+                                        <td style="vertical-align: middle">@material.Name</td>
+                                        <td style="vertical-align: middle">@material.Category</td>
+                                        @* <td class="text-center" style="vertical-align: middle"><button class="btn btn-primary btn-sm">Edit</button></td> *@
+                                        @* <td class="text-center" style="vertical-align: middle"><button class="btn btn-danger btn-sm">Delete</button></td> *@
+                                    </tr>
+                            }                            
+                        </tbody>
+                        }
+                        
+                    </table>
+
+                </div>
+            </fieldset>
+        </div>
+
+
+        @* Displays on the right side*@
+        <div class="col" >
+            <fieldset style="border-radius: 5px">
+                <legend class="text-center">Selected Material Data</legend>
+                <div style="padding: 10px">
+                    <MaterialDataComponent MaterialData="_material" OnSave="(material) => HandleSaveAsync(material)"></MaterialDataComponent>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    
+</div>
+

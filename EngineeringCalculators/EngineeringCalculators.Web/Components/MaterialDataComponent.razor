@@ -1,0 +1,84 @@
+﻿<EditForm Model="MaterialData" FormName="Material" OnValidSubmit="HandleSaveAsync">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>    
+
+    <div>
+        <label for="name">Name</label>
+        <InputText id="name" @bind-Value="MaterialData.Name" class="form-control mb-3" />
+    </div>
+
+    <div>
+        <label for="description" class="form-label">Description</label>
+        <InputTextArea id="description" @bind-Value="MaterialData.Description" class="form-control mb-3" />
+    </div>
+
+    <div>
+        <label for="elasticModulus" class="form-label">Elastic Modulus (N/mm^2)</label>
+        <InputNumber id="elasticModulus" TValue="double" @bind-Value="MaterialData.ElasticModulus" class="form-control mb-3" />
+    </div>
+
+    <div>
+        <label for="poissonsRatio" class="form-label">Poissons Ratio</label>
+        <InputNumber id="poissonsRatio" TValue="double" @bind-Value="MaterialData.PoissonsRatio" class="form-control mb-3" />
+    </div>
+
+    <div>
+        <label for="shearModulus" class="form-label">Shear Modulus (N/mm^2)</label>
+        <InputNumber id="shearModulus" TValue="double" @bind-Value="MaterialData.ShearModulus" class="form-control mb-3" />
+    </div>
+
+    <div>
+        <label for="massDensity" class="form-label">Mass Density (kg.m^3)</label>
+        <InputNumber id="massDensity" TValue="double" @bind-Value="MaterialData.MassDensity" class="form-control mb-3" />
+    </div>
+
+    <div>
+        <label for="tensileStrength" class="form-label">Tensile Strength (N/mm^2)</label>
+        <InputNumber id="tensileStrength" TValue="double" @bind-Value="MaterialData.TensileStrength" class="form-control mb-3" />
+    </div>
+
+    <div>
+        <label for="compressiveStrength" class="form-label">Compressive Strength (N/mm^2)</label>
+        <InputNumber id="compressiveStrength" TValue="double" @bind-Value="MaterialData.CompressiveStrength" class="form-control mb-3" />
+    </div>
+
+    <div>
+        <label for="yieldStrength" class="form-label">Yield Strength (N/mm^2)</label>
+        <InputNumber id="yieldStrength" TValue="double" @bind-Value="MaterialData.YieldStrength" class="form-control mb-3" />
+    </div>
+
+    <div>
+        <label for="shearStrength" class="form-label">Shear Strength (N/mm^2)</label>
+        <InputNumber id="shearStrength" TValue="double" @bind-Value="MaterialData.ShearStrength" class="form-control mb-3" />
+    </div>
+
+    <div>
+        <label for="category" class="form-label">Category</label>
+        <InputText id="category" @bind-Value="MaterialData.Category" class="form-control mb-3" />
+    </div>
+
+    <div style="text-align: center">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</EditForm>
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public MaterialModel MaterialData { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<MaterialModel> OnSave { get; set; }
+
+
+    public async Task HandleSaveAsync()
+    {
+        await OnSave.InvokeAsync(MaterialData);
+    }
+
+
+}
