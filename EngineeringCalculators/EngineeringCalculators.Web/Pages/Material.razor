@@ -16,7 +16,7 @@
                 <legend class="text-center">Material List</legend>
 
 
-                <div class="row p-3">
+                <div class="row ps-3 pe-3">
                     <div class="col-6" style="text-align:center">
                         <button @onclick=(HandleLoadingMaterialAsync) type="button" class="btn btn-primary">Load Material</button>
                     </div>
@@ -27,29 +27,55 @@
 
                 <hr />
 
-                @* Displays a table of available material *@
+                @* Filter by Category *@
+                <div class="row p-3">
+                    <div class="col-6">
+                        <div style="text-align:center; font-weight:bold; padding: 3px">
+                            <label for="search">Search Material</label>
+                        </div>
+                        <div>
+                            <InputText style="width: 100%" id="search" @bind-Value="_searchText"/>
+                        </div>
+                        <div class="row" >
+                            <div class="col p-2" style="text-align:center">
+                                <button type="button" @onclick="HandleSearchText" class="btn btn-primary btn-sm">Search</button>
+                            </div>
+                            <div class="col p-2" style="text-align:center">
+                                <button type="button" @onclick="HandleClearSearch" class="btn btn-primary btn-sm">Clear</button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div style="text-align:center; font-weight:bold; padding: 3px">
+                            <label for="filter" >Filter by Category</label>
+                        </div>
+                        <div>
+                            <InputSelect style="width: 100%" id="filter" TValue="string" Value="_selectedCategory" ValueExpression="@(() => _selectedCategory)" ValueChanged="HandleFilterByCategory">
+                                <option value="All">All</option>
+                                @foreach (string cat in _filterByCategory)
+                                {
+                                    <option value="@cat">@cat</option>
+                                }
+                            </InputSelect>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr />
 
+                @* Displays a table of available material *@
                 <div class="row pt-3 ps-3 pe-3">
-                    <div class="fs-4" style="display: flex; justify-content: space-evenly; background-color: darkslateblue; color: white">
+                    <div class="fs-4" style="display: flex; justify-content: space-evenly; background-color: cadetblue; color: white">
                         <div>Material</div>
                         <div>Category</div>
                     </div>
-                    @* <table class="table table-bordered" style="width: 100%; "> *@
-                    @*     <thead class="text-center table-primary"> *@
-                    @*         <tr> *@
-                    @*             <th style="width:50%">Material</th> *@
-                    @*             <th style="width:50%">Category</th> *@
-                    @*             @* <th></th> *@
-                    @*             @* <th></th> *@
-                    @*         </tr> *@
-                    @*     </thead> *@
-                    @* </table> *@
                     <div style=" max-height:60vh; overflow:auto">
                         <table class="table table-bordered table-hover" style="width: 100%;">
                             @if (_materials.Count > 0)
                             {
                                 <tbody>
-                                    @foreach (MaterialModel material in _materials)
+                                    @foreach (MaterialModel material in _filteredMaterial)
                                     {
                                         <tr @onclick="(() => HandleSelectedMaterial(material))">
                                             <td style="vertical-align: middle; width:50%">@material.Name</td>

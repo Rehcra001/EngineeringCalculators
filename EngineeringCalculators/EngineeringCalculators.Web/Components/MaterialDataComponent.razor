@@ -16,6 +16,11 @@
     </div>
 
     <div>
+        <label for="category" class="form-label">Category</label>
+        <InputText id="category" @bind-Value="MaterialData.Category" class="form-control mb-3" disabled="@Disabled" />
+    </div>
+
+    <div>
         <label for="description" class="form-label">Description</label>
         <InputTextArea id="description" @bind-Value="MaterialData.Description" class="form-control mb-3" disabled="@Disabled" />
     </div>
@@ -59,12 +64,6 @@
         <label for="shearStrength" class="form-label">Shear Strength (N/mm^2)</label>
         <InputNumber id="shearStrength" TValue="double" @bind-Value="MaterialData.ShearStrength" class="form-control mb-3" disabled="@Disabled" />
     </div>
-
-    <div>
-        <label for="category" class="form-label">Category</label>
-        <InputText id="category" @bind-Value="MaterialData.Category" class="form-control mb-3" disabled="@Disabled" />
-    </div>
-
 
 </EditForm>
 
