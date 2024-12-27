@@ -44,6 +44,7 @@ namespace EngineeringCalculators.Web.Services
             }
         }
 
+
         public async Task SaveAllAsync(List<MaterialModel> materials)
         {
             var options = new JsonSerializerOptions();

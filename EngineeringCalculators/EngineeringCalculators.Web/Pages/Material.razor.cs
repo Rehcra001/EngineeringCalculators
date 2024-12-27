@@ -1,6 +1,7 @@
 ﻿using EngineeringCalculators.Web.Models;
 using EngineeringCalculators.Web.Services.Contracts;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace EngineeringCalculators.Web.Pages
 {
@@ -18,6 +19,9 @@ namespace EngineeringCalculators.Web.Pages
         [Inject]
         public required IMaterialService MaterialService { get; set; }
 
+        [Inject]
+        public required IJSRuntime _jSRuntime { get; set; }
+
         private void HandleSelectedMaterial(MaterialModel material)
         {
             _material = material;
@@ -29,6 +33,7 @@ namespace EngineeringCalculators.Web.Pages
         {
             _materials = await MaterialService.GetAllAsync();
             _filteredMaterial = _materials;
+            SortMaterialByName();
             GetCategories();
         }
 
@@ -37,6 +42,20 @@ namespace EngineeringCalculators.Web.Pages
             _material = new();
             _canSave = true;
             _disabled = false;
+        }
+
+        private async Task HandleDeleteAsync()
+        {
+            string message = "Are you sure you want to delete this material?";
+            bool confirmed = await _jSRuntime.InvokeAsync<bool>("confirm", message);
+
+            if (confirmed)
+            {
+                _materials.Remove(_material);
+                await HandleSaveAsync(_material);
+                _material = new();
+            }
+            
         }
 
         private async Task HandleSaveAsync(MaterialModel material)
@@ -59,8 +78,6 @@ namespace EngineeringCalculators.Web.Pages
                 }
                 _materials.Add(material);
             }
-
-
 
             if (MaterialService.FileHandle is null)
             {
@@ -119,6 +136,17 @@ namespace EngineeringCalculators.Web.Pages
         private void GetCategories()
         {
             _filterByCategory = _materials.Select(x => x.Category).Distinct().ToList();
+        }
+
+        private void SortMaterialByName()
+        {
+            _filteredMaterial.Sort((x, y) => x.Name.CompareTo(y.Name));
+        }
+
+        private void SortMaterialByCategoryThenName()
+        {
+            //_filteredMaterial.Sort((x, y) => x.Category.CompareTo(y.Category));
+            _filteredMaterial = _filteredMaterial.OrderBy(c => c.Category).ThenBy(n => n.Name).ToList();
         }
     }
 
