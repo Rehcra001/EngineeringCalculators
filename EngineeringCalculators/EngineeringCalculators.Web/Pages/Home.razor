@@ -1,37 +1,3 @@
 ﻿@page "/"
 
-
-@inject IMaterialService MaterialService
-
-<PageTitle>Home</PageTitle>
-
-<h1>Hello, world!</h1>
-
-<button @onclick="HandleSaveAllAsync">Save</button>
-<button @onclick="HandleGetAllAsync">Load All Materials</button>
-
-Welcome to your new app.
-
-@code {
-    private List<MaterialModel> materials = new();
-
-    protected override async Task OnInitializedAsync()
-    {
-        materials.Add(new MaterialModel { Name = "Brass", TensileStrength = 680.5 });
-        materials.Add(new MaterialModel { Name = "Copper" });
-        materials.Add(new MaterialModel { Name = "Steel" });
-        materials.Add(new MaterialModel { Name = "Rubber" });
-
-
-    }
-
-    private async Task HandleSaveAllAsync()
-    {
-        await MaterialService.SaveAllAsync(materials);
-    }
-
-    private async Task HandleGetAllAsync()
-    {
-        await MaterialService.GetAllAsync();
-    }
-}
+<SMBlankAndPierceComponent Model="new()"></SMBlankAndPierceComponent>

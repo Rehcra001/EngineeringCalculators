@@ -1,4 +1,110 @@
 ﻿
-@code {
+<div>
+    <fieldset>
+        <legend>Enter Values</legend>
+        <EditForm Model="Model" FormName="BlankAndPierceCalculation" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <fieldset style="width:fit-content; text-align:center">
+                <legend>Use</legend>
+                <div style="margin: 5px;">
+                    <InputRadioGroup Name="calcType" @bind-Value="Model.CalcType">
+                        <InputRadio TValue="string" Value=@nameof(Enums.PierceAndBlankCalcType.Tensile) /> <span> Tensile Strength &nbsp; </span>
+                        <InputRadio TValue="string" Value=@nameof(Enums.PierceAndBlankCalcType.Shear) /> <span> Shear Strength </span>
+                    </InputRadioGroup>
+                </div>
+            </fieldset>
+
+            <div>
+                <ValidationMessage For="@(() => Model.ProjectName)"/>
+                <label for="projectName">Project Name</label>
+                <InputText id="projectName" @bind-Value="Model.ProjectName" />
+            </div>
+
+            <div>
+                <label for="description">Description</label>
+                <InputText id="description" @bind-Value="Model.Description" />
+            </div>
+
+            <div>
+                <ValidationMessage For="@(() => Model.NumberOfPunches)" />
+                <label for="numberOfPunches">Number of Punches</label>
+                <InputNumber TValue="int" id="numberOfPunches" @bind-Value="Model.NumberOfPunches" />
+            </div>
+
+            <div>
+                <ValidationMessage For="@(() => Model.Perimeter)" />
+                <label for="perimeter">Perimeter (mm)</label>
+                <InputNumber TValue="double" id="perimeter" @bind-Value="Model.Perimeter" />
+            </div>
+
+            <div>
+                <label for="tensileStrength">Tensile Strength (MPA)</label>
+                <InputNumber TValue="double" id="tensileStrength" @bind-Value="Model.TensileStrength" />
+            </div>
+
+            <div>
+                <label for="shearStrength">Shear Strength (MPA)</label>
+                <InputNumber TValue="double" id="shearStrength" @bind-Value="Model.ShearStrength" />
+            </div>
+
+            <div>
+                <ValidationMessage For="@(() => Model.PercentageOfTensileStrength)" />
+                <label for="percentOfTensileStrength">Percent Of Tensile Strength</label>
+                <InputNumber TValue="double" id="percentOfTensileStrength" @bind-Value="Model.PercentageOfTensileStrength"/>
+            </div>
+
+            <div>
+                <fieldset>
+                    <legend>Results</legend>
+                </fieldset>
+            </div>
+
+            <div>
+                <button type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Calculate)))>Calculate</button>
+                <button type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Save)))>Save</button>
+            </div>
+        </EditForm>
+    </fieldset>
+    
+</div>
+
+
+@* Form to show the results *@
+
+@code {  
+    [Parameter]
+    public SMBlankAndPierceModel Model { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<SMBlankAndPierceModel> OnSave { get; set; }
+
+    private string _submitType { get; set; } = "";
+
+    public async Task HandleSaveAsync()
+    {
+        await OnSave.InvokeAsync(Model);
+    }
+
+    private void Calculate()
+    {
+
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (_submitType.Equals(nameof(Enums.SubmitType.Calculate)))
+        {
+            Calculate();
+        }
+        else if (_submitType.Equals(nameof(Enums.SubmitType.Save)))
+        {
+            await HandleSaveAsync();
+        }
+    }
+
+    private void SetSubmitType(string type)
+    {
+        _submitType = type;
+    }
 
 }

@@ -1,17 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using EngineeringCalculators.Web.CustomValidations;
 
 namespace EngineeringCalculators.Web.Models.SheetMetal
 {
-    public class SMProjectModel
+    public class SMHeaderModel
     {
         [Required]
         public string ProjectName { get; set; } = string.Empty;
         
         public string Description { get; set; } = string.Empty;
+
         [Required]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Must be greater than zero")]
-        public double Thickness { get; set; }
+        public MaterialModel Material { get; set; } = new();
+
         [Required]
-        public  MaterialModel? Material { get; set; }
+        [GreaterThanZeroDouble]
+        public double MaterialThickness { get; set; }
+        
     }
 }
