@@ -7,15 +7,15 @@
             <fieldset style="width:fit-content; text-align:center">
                 <legend>Use</legend>
                 <div style="margin: 5px;">
-                    <InputRadioGroup Name="calcType" @bind-Value="Model.CalcType">
-                        <InputRadio TValue="string" Value=@nameof(Enums.PierceAndBlankCalcType.Tensile) /> <span> Tensile Strength &nbsp; </span>
+                    <InputRadioGroup TValue="string" Name="calcType" @bind-Value:get="@Model.CalcType" @bind-Value:set="(Value) => SetCalcType(Value)" >
+                        <InputRadio TValue="string" Value=@nameof(Enums.PierceAndBlankCalcType.Tensile)/> <span> Tensile Strength &nbsp; </span>
                         <InputRadio TValue="string" Value=@nameof(Enums.PierceAndBlankCalcType.Shear) /> <span> Shear Strength </span>
                     </InputRadioGroup>
                 </div>
             </fieldset>
 
             <div>
-                <ValidationMessage For="@(() => Model.ProjectName)"/>
+                <ValidationMessage For="@(() => Model.ProjectName)" />
                 <label for="projectName">Project Name</label>
                 <InputText id="projectName" @bind-Value="Model.ProjectName" />
             </div>
@@ -38,11 +38,22 @@
             </div>
 
             <div>
+                @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Tensile)) && String.IsNullOrWhiteSpace(CalcErrorMessage) == false)
+                {
+                    <label style="color: red">@CalcErrorMessage</label>
+                    <br />
+                }
+
                 <label for="tensileStrength">Tensile Strength (MPA)</label>
                 <InputNumber TValue="double" id="tensileStrength" @bind-Value="Model.TensileStrength" />
             </div>
 
             <div>
+                @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Shear)) && String.IsNullOrWhiteSpace(CalcErrorMessage) == false)
+                {
+                    <label style="color: red">@CalcErrorMessage</label>
+                    <br />
+                }
                 <label for="shearStrength">Shear Strength (MPA)</label>
                 <InputNumber TValue="double" id="shearStrength" @bind-Value="Model.ShearStrength" />
             </div>
@@ -50,12 +61,26 @@
             <div>
                 <ValidationMessage For="@(() => Model.PercentageOfTensileStrength)" />
                 <label for="percentOfTensileStrength">Percent Of Tensile Strength</label>
-                <InputNumber TValue="double" id="percentOfTensileStrength" @bind-Value="Model.PercentageOfTensileStrength"/>
+                <InputNumber TValue="double" id="percentOfTensileStrength" @bind-Value="Model.PercentageOfTensileStrength" />
             </div>
 
             <div>
                 <fieldset>
                     <legend>Results</legend>
+                    <div>
+                        <label for="cuttingForce">Cutting Force (N)</label>
+                        <InputNumber TValue="double" id="cuttingForce" @bind-Value="Model.CuttingForce" />
+                    </div>
+
+                    <div>
+                        <label for="strippingForce">Stripping Force</label>
+                        <InputNumber TValue="double" id="strippingForce" @bind-Value="Model.StrippingForce" />
+                    </div>
+
+                    <div>
+                        <label for="clearance">Clearance</label>
+                        <InputNumber TValue="double" id="clearance" @bind-Value="Model.Clearance" />
+                    </div>
                 </fieldset>
             </div>
 
@@ -65,46 +90,9 @@
             </div>
         </EditForm>
     </fieldset>
-    
+
 </div>
 
 
 @* Form to show the results *@
 
-@code {  
-    [Parameter]
-    public SMBlankAndPierceModel Model { get; set; } = new();
-
-    [Parameter]
-    public EventCallback<SMBlankAndPierceModel> OnSave { get; set; }
-
-    private string _submitType { get; set; } = "";
-
-    public async Task HandleSaveAsync()
-    {
-        await OnSave.InvokeAsync(Model);
-    }
-
-    private void Calculate()
-    {
-
-    }
-
-    private async Task HandleValidSubmit()
-    {
-        if (_submitType.Equals(nameof(Enums.SubmitType.Calculate)))
-        {
-            Calculate();
-        }
-        else if (_submitType.Equals(nameof(Enums.SubmitType.Save)))
-        {
-            await HandleSaveAsync();
-        }
-    }
-
-    private void SetSubmitType(string type)
-    {
-        _submitType = type;
-    }
-
-}

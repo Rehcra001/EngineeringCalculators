@@ -25,7 +25,7 @@ namespace EngineeringCalculators.Web.Models.SheetMetal
         [Range(0.001, 1, ErrorMessage = "Must be greater than 0 and less than or equal to 1")]
         public double PercentageOfTensileStrength { get; set; } = 0.7;
 
-        public double ForceRequired { get; set; }
+        public double CuttingForce { get; set; }
 
         public double StrippingForce { get; set; }
 
