@@ -10,6 +10,9 @@ namespace EngineeringCalculators.Web.Models.SheetMetal
 
         public string Description { get; set; } = string.Empty;
 
+        [Range(0.001, double.MaxValue, ErrorMessage = "Thickness must be greater than 0")]
+        public double MaterialThickness { get; set; }
+
         [Range(1, int.MaxValue, ErrorMessage = "Number of punches must be greater than zero")]
         public int NumberOfPunches { get; set; } = 1;
 
@@ -20,10 +23,14 @@ namespace EngineeringCalculators.Web.Models.SheetMetal
 
         public double ShearStrength { get; set; }
 
-        public string CalcType { get; set; } = nameof(Enums.Enums.PierceAndBlankCalcType.Tensile);
+        public string CalcType { get; set; } = string.Empty;
 
         [Range(0.001, 1, ErrorMessage = "Must be greater than 0 and less than or equal to 1")]
         public double PercentageOfTensileStrength { get; set; } = 0.7;
+
+        public string StripperType { get; set; } = string.Empty;
+
+        public double StripperPercentOfCuttingForce { get; set; }
 
         public double CuttingForce { get; set; }
 

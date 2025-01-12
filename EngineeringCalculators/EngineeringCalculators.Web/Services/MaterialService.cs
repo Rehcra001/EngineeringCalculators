@@ -117,8 +117,6 @@ namespace EngineeringCalculators.Web.Services
                     materials = JsonSerializer.Deserialize<List<MaterialModel>>(_fileText)!;
                 }
             }
-
-
             return materials;
         }
 

@@ -13,5 +13,11 @@
             Tensile,
             Shear
         }
+
+        public enum StripperType
+        {
+            Solid,
+            Spring
+        }
     }
 }

@@ -1,95 +1,178 @@
 ﻿
 <div>
-    <fieldset>
-        <legend>Enter Values</legend>
-        <EditForm Model="Model" FormName="BlankAndPierceCalculation" OnValidSubmit="HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <fieldset style="width:fit-content; text-align:center">
-                <legend>Use</legend>
-                <div style="margin: 5px;">
-                    <InputRadioGroup TValue="string" Name="calcType" @bind-Value:get="@Model.CalcType" @bind-Value:set="(Value) => SetCalcType(Value)" >
-                        <InputRadio TValue="string" Value=@nameof(Enums.PierceAndBlankCalcType.Tensile)/> <span> Tensile Strength &nbsp; </span>
-                        <InputRadio TValue="string" Value=@nameof(Enums.PierceAndBlankCalcType.Shear) /> <span> Shear Strength </span>
-                    </InputRadioGroup>
+    <div class="text-center fs-4 fw-bold mb-3">
+        <label>Cutting Force, Stripping Force and Clearance Calculations</label>
+    </div>
+
+    <EditForm Model="Model" FormName="BlankAndPierceCalculation" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <div class="row">
+            <div class="col m-1" style="border: 1px solid black; border-radius: 10px; min-width: 300px">
+                <div class="text-center fs-5 fw-bold">
+                    <label>Details</label>
+                </div>
+                <div class="form-control mb-1">
+                    <div class="mt-1">
+                        <ValidationMessage For="@(() => Model.ProjectName)" />
+                        <label for="projectName" class="form-label">Project Name</label>
+                        <InputText id="projectName" @bind-Value="Model.ProjectName" class="form-control" />
+                    </div>
+
+                    <div class="mt-1">
+                        <label for="description" class="form-label">Description</label>
+                        <InputText id="description" @bind-Value="Model.Description" class="form-control" />
+                    </div>
+
+                    <div class="mt-1">
+                        <ValidationMessage For="@(() => Model.MaterialThickness)" />
+                        <label for="thickness" class="form-label">Material Thickness (mm)</label>
+                        <InputNumber TValue="double" id="thickness" @bind-Value="Model.MaterialThickness" class="form-control" />
+                    </div>
+
+                    <div class="mt-1">
+                        <ValidationMessage For="@(() => Model.NumberOfPunches)" />
+                        <label for="numberOfPunches" class="form-label">Number of Punches</label>
+                        <InputNumber TValue="int" id="numberOfPunches" @bind-Value="Model.NumberOfPunches" class="form-control" />
+                    </div>
+
+                    <div class="mt-1">
+                        <ValidationMessage For="@(() => Model.Perimeter)" />
+                        <label for="perimeter" class="form-label">Perimeter (mm) "for a single punch"</label>
+                        <InputNumber TValue="double" id="perimeter" @bind-Value="Model.Perimeter" class="form-control" />
+                    </div>
+
+                    <div class="mt-1">
+                        @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Tensile)) && String.IsNullOrWhiteSpace(CalcErrorMessage) == false)
+                        {
+                            <label style="color: red">@CalcErrorMessage</label>
+                            <br />
+                        }
+                        <label for="tensileStrength" class="form-label ">Tensile Strength (MPA)</label>
+                        <InputNumber TValue="double" id="tensileStrength" @bind-Value="Model.TensileStrength" class="form-control" />
+
+                    </div>
+
+                    <div class="mt-1 mb-1">
+                        @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Shear)) && String.IsNullOrWhiteSpace(CalcErrorMessage) == false)
+                        {
+                            <label style="color: red">@CalcErrorMessage</label>
+                            <br />
+                        }
+                        <label for="shearStrength" class="form-label ">Shear Strength (MPA)</label>
+                        <InputNumber TValue="double" id="shearStrength" @bind-Value="Model.ShearStrength" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col m-1" style="border: 1px solid black; border-radius: 10px; min-width: 300px">
+                <div class="text-center fs-5 fw-bold">
+                    <label>Calculation Type</label>
+                </div>
+                <div class="form-control mb-1">
+                    <div class="form-control">
+                        @if (String.IsNullOrWhiteSpace(CalcTypeErrorMessage) == false)
+                        {
+                            <label style="color: red">@CalcTypeErrorMessage</label>
+                            <br />
+                        }
+
+                        <InputRadioGroup TValue="string" Name="calcType" @bind-Value:get="@Model.CalcType" @bind-Value:set="(Value) => SetCalcType(Value)">
+                            <div class="form-check form-check-inline">
+                                <InputRadio TValue="string" Value=@nameof(Enums.PierceAndBlankCalcType.Tensile) />
+                                <span> Tensile Strength &nbsp; </span>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <InputRadio TValue="string" Value=@nameof(Enums.PierceAndBlankCalcType.Shear) />
+                                <span> Shear Strength </span>
+                            </div>
+                        </InputRadioGroup>
+                    </div>
+
+                    @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Tensile)))
+                    {
+                        <div class="form-control mt-2">
+                            <ValidationMessage For="@(() => Model.PercentageOfTensileStrength)" />
+                            <label for="percentOfTensileStrength" class="form-label">Percent Of Tensile Strength</label>
+                            <InputNumber TValue="double" id="percentOfTensileStrength" @bind-Value="Model.PercentageOfTensileStrength" class="form-control" />
+                        </div>
+
+                        <div>
+                            @* Image of Tensile formula and calculation go here *@
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="col m-1" style="border: 1px solid black; border-radius: 10px; min-width: 300px">
+
+                <div class="text-center fs-5 fw-bold">
+                    <label>Sharpening Profile Type</label>
+                </div>
+                <div class="form-control mb-1">
+
+                    @* Sharpening Content to go here *@
+
+                </div>
+            </div>
+
+            <div class="col m-1" style="border: 1px solid black; border-radius: 10px; min-width: 300px">
+                <div class="text-center fs-5 fw-bold">
+                    <label>Stripper Type</label>
+                </div>
+                <div class="form-control mb-1">
+                    <div class="form-control ">
+                        <InputRadioGroup TValue="string" Name="stripperType" @bind-Value:get="@Model.StripperType" @bind-Value:set="(Value) => SetStripperType(Value)">
+                            <div class="form-check form-check-inline" style="width: 50%">
+                                <InputRadio TValue="string" Value=@nameof(Enums.StripperType.Solid) />
+                                <span> Solid </span>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <InputRadio TValue="string" Value=@nameof(Enums.StripperType.Spring) />
+                                <span> Spring </span>
+                            </div>
+                        </InputRadioGroup>
+                    </div>
+                    <div>
+
+                        @* Stripper Content to go here *@
+
+                    </div>                   
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div>
+            <fieldset>
+                <legend>Results</legend>
+                <div>
+                    <label for="cuttingForce">Cutting Force (N)</label>
+                    <InputNumber TValue="double" id="cuttingForce" @bind-Value="Model.CuttingForce" />
+                </div>
+
+                <div>
+                    <label for="strippingForce">Stripping Force</label>
+                    <InputNumber TValue="double" id="strippingForce" @bind-Value="Model.StrippingForce" />
+                </div>
+
+                <div>
+                    <label for="clearance">Clearance</label>
+                    <InputNumber TValue="double" id="clearance" @bind-Value="Model.Clearance" />
                 </div>
             </fieldset>
+        </div>
 
-            <div>
-                <ValidationMessage For="@(() => Model.ProjectName)" />
-                <label for="projectName">Project Name</label>
-                <InputText id="projectName" @bind-Value="Model.ProjectName" />
-            </div>
-
-            <div>
-                <label for="description">Description</label>
-                <InputText id="description" @bind-Value="Model.Description" />
-            </div>
-
-            <div>
-                <ValidationMessage For="@(() => Model.NumberOfPunches)" />
-                <label for="numberOfPunches">Number of Punches</label>
-                <InputNumber TValue="int" id="numberOfPunches" @bind-Value="Model.NumberOfPunches" />
-            </div>
-
-            <div>
-                <ValidationMessage For="@(() => Model.Perimeter)" />
-                <label for="perimeter">Perimeter (mm)</label>
-                <InputNumber TValue="double" id="perimeter" @bind-Value="Model.Perimeter" />
-            </div>
-
-            <div>
-                @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Tensile)) && String.IsNullOrWhiteSpace(CalcErrorMessage) == false)
-                {
-                    <label style="color: red">@CalcErrorMessage</label>
-                    <br />
-                }
-
-                <label for="tensileStrength">Tensile Strength (MPA)</label>
-                <InputNumber TValue="double" id="tensileStrength" @bind-Value="Model.TensileStrength" />
-            </div>
-
-            <div>
-                @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Shear)) && String.IsNullOrWhiteSpace(CalcErrorMessage) == false)
-                {
-                    <label style="color: red">@CalcErrorMessage</label>
-                    <br />
-                }
-                <label for="shearStrength">Shear Strength (MPA)</label>
-                <InputNumber TValue="double" id="shearStrength" @bind-Value="Model.ShearStrength" />
-            </div>
-
-            <div>
-                <ValidationMessage For="@(() => Model.PercentageOfTensileStrength)" />
-                <label for="percentOfTensileStrength">Percent Of Tensile Strength</label>
-                <InputNumber TValue="double" id="percentOfTensileStrength" @bind-Value="Model.PercentageOfTensileStrength" />
-            </div>
-
-            <div>
-                <fieldset>
-                    <legend>Results</legend>
-                    <div>
-                        <label for="cuttingForce">Cutting Force (N)</label>
-                        <InputNumber TValue="double" id="cuttingForce" @bind-Value="Model.CuttingForce" />
-                    </div>
-
-                    <div>
-                        <label for="strippingForce">Stripping Force</label>
-                        <InputNumber TValue="double" id="strippingForce" @bind-Value="Model.StrippingForce" />
-                    </div>
-
-                    <div>
-                        <label for="clearance">Clearance</label>
-                        <InputNumber TValue="double" id="clearance" @bind-Value="Model.Clearance" />
-                    </div>
-                </fieldset>
-            </div>
-
-            <div>
-                <button type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Calculate)))>Calculate</button>
-                <button type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Save)))>Save</button>
-            </div>
-        </EditForm>
-    </fieldset>
+        <div>
+            <button type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Calculate)))>Calculate</button>
+            <button type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Save)))>Save</button>
+        </div>
+    </EditForm>
 
 </div>
 

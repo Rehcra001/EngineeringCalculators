@@ -15,6 +15,7 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
 
         private string CalcErrorMessage = "";
         private string CalcTypeErrorMessage = "";
+        private string StripperTypeErrorMessage = "";
 
         private string _submitType { get; set; } = "";
 
@@ -48,17 +49,61 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
             }
         }
 
+        private void SetStripperType(string stripperType)
+        {
+            Model.StripperType = (string)stripperType;
+
+            StripperTypeErrorMessage = "";
+        }
+
         private void Calculate()
         {
             if (ValidateCalcType())
             {
-
+                if (Model.CalcType.Equals(nameof(Enums.Enums.PierceAndBlankCalcType.Tensile)))
+                {
+                    UseTensileCalC();
+                }
+                else if (Model.CalcType.Equals(nameof(Enums.Enums.PierceAndBlankCalcType.Shear)))
+                {
+                    UseShearCalc();
+                }
             }
+        }
+
+        private void UseShearCalc()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void UseTensileCalC()
+        {
+            double result = Model.PercentageOfTensileStrength * Model.TensileStrength;
+            result *= Model.MaterialThickness;
+            result *= Model.Perimeter;
+            result *= Model.NumberOfPunches;
+
+            Model.CuttingForce = result;
         }
 
         private bool ValidateCalcType()
         {
-            throw new NotImplementedException();
+            CalcTypeErrorMessage = "";
+
+            switch (Model.CalcType)
+            {
+                case nameof(Enums.Enums.PierceAndBlankCalcType.Tensile):
+                    return true;
+                case nameof(Enums.Enums.PierceAndBlankCalcType.Shear):
+                    return true;
+                default:
+                    if (String.IsNullOrWhiteSpace(Model.CalcType))
+                    {
+                        CalcTypeErrorMessage = "Please select one of the options below to perform a calculation";
+                       
+                    }
+                    return false;
+            }
         }
 
         private bool ValidateShearData()
