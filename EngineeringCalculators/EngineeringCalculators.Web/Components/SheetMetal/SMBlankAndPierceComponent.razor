@@ -110,7 +110,7 @@
                             <InputNumber TValue="double" id="percentOfTensileStrength" @bind-Value="Model.PercentageOfTensileStrength" class="form-control" />
                         </div>
 
-                        <div style="width: 100%; margin-left:10px">
+                        <div style="width: 100%; text-align:center">
                             <img src="/Images/CuttingForceTensile.png" alt="Cutting Force Tensile" />
                             @* Image of Tensile formula and calculation go here *@
                         </div>
@@ -119,7 +119,7 @@
                     @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Shear)))
                     {
 
-                        <div style="width: 100%">
+                        <div style="width: 100%; text-align:center">
                             <img src="/Images/Cutting Force Shear.png" alt="Cutting Force Shear" />
                             @* Image of Shear strength formula and calculation go here *@
                         </div>
