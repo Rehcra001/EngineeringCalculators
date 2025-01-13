@@ -19,5 +19,11 @@
             Solid,
             Spring
         }
+
+        public enum SharpeningProfileType
+        {
+            Flat,
+            Beveled
+        }
     }
 }

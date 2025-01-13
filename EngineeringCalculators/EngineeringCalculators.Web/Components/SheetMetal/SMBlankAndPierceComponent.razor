@@ -4,6 +4,7 @@
         <label>Cutting Force, Stripping Force and Clearance Calculations</label>
     </div>
 
+
     <EditForm Model="Model" FormName="BlankAndPierceCalculation" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
         <div class="row">
@@ -97,8 +98,18 @@
                             <InputNumber TValue="double" id="percentOfTensileStrength" @bind-Value="Model.PercentageOfTensileStrength" class="form-control" />
                         </div>
 
-                        <div>
+                        <div style="width: 100%">
+                            <img src="/Images/CuttingForceTensile.png" alt="Cutting Force Tensile" style="width: 100%"/>
                             @* Image of Tensile formula and calculation go here *@
+                        </div>
+                    }
+
+                    @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Shear)))
+                    {                        
+
+                        <div style="width: 100%">
+                            <img src="/Images/Cutting Force Shear.png" alt="Cutting Force Shear" style="width: 100%" />
+                            @* Image of Shear strength formula and calculation go here *@
                         </div>
                     }
                 </div>
@@ -110,8 +121,24 @@
                     <label>Sharpening Profile Type</label>
                 </div>
                 <div class="form-control mb-1">
+                    @if (String.IsNullOrWhiteSpace(CuttingForceReductionTypeErrorMessage) == false)
+                    {
+                        <label style="color: red">@CuttingForceReductionTypeErrorMessage</label>
+                        <br />
+                    }
 
-                    @* Sharpening Content to go here *@
+                    <InputRadioGroup TValue="string" Name="reductionForceType" @bind-Value:get="@Model.SharpeningProfileType" @bind-Value:set="(Value) => SetForceReductionType(Value)">
+                        <div class="form-check form-check-inline" style="width: 50%">
+                            <InputRadio TValue="string" Value=@nameof(Enums.SharpeningProfileType.Flat) />
+                            <span> Flat </span>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <InputRadio TValue="string" Value=@nameof(Enums.SharpeningProfileType.Beveled) />
+                            <span> Beveled </span>
+                        </div>
+                    </InputRadioGroup>
+
 
                 </div>
             </div>
@@ -144,38 +171,34 @@
             </div>
         </div>
 
-
-
-
-
-        <div>
-            <fieldset>
-                <legend>Results</legend>
-                <div>
-                    <label for="cuttingForce">Cutting Force (N)</label>
-                    <InputNumber TValue="double" id="cuttingForce" @bind-Value="Model.CuttingForce" />
-                </div>
-
-                <div>
-                    <label for="strippingForce">Stripping Force</label>
-                    <InputNumber TValue="double" id="strippingForce" @bind-Value="Model.StrippingForce" />
-                </div>
-
-                <div>
-                    <label for="clearance">Clearance</label>
-                    <InputNumber TValue="double" id="clearance" @bind-Value="Model.Clearance" />
-                </div>
-            </fieldset>
-        </div>
-
         <div>
             <button type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Calculate)))>Calculate</button>
             <button type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Save)))>Save</button>
         </div>
     </EditForm>
 
+    <div>
+        <fieldset>
+            <legend>Results</legend>
+            <div>
+                <label for="cuttingForce">Cutting Force (N)</label>
+                <InputNumber TValue="double" id="cuttingForce" @bind-Value="Model.CuttingForce" />
+            </div>
+
+            <div>
+                <label for="strippingForce">Stripping Force</label>
+                <InputNumber TValue="double" id="strippingForce" @bind-Value="Model.StrippingForce" />
+            </div>
+
+            <div>
+                <label for="clearance">Clearance</label>
+                <InputNumber TValue="double" id="clearance" @bind-Value="Model.Clearance" />
+            </div>
+        </fieldset>
+    </div>
+
 </div>
 
 
-@* Form to show the results *@
+
 

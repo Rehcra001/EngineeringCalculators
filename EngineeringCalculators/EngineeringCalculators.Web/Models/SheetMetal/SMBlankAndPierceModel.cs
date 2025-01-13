@@ -5,7 +5,7 @@ namespace EngineeringCalculators.Web.Models.SheetMetal
     public class SMBlankAndPierceModel
     {
         public int Id { get; set; }
-        [Required]
+        //[Required]
         public string ProjectName { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
@@ -32,7 +32,13 @@ namespace EngineeringCalculators.Web.Models.SheetMetal
 
         public double StripperPercentOfCuttingForce { get; set; }
 
+
         public double CuttingForce { get; set; }
+        public double ReducedCuttingForce { get; set; }
+        public double CuttingForceReductionPercent { get; set; } = 0.6;
+
+        public string SharpeningProfileType { get; set; } = string.Empty;
+
 
         public double StrippingForce { get; set; }
 
