@@ -7,77 +7,89 @@
 
     <EditForm Model="Model" FormName="BlankAndPierceCalculation" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
+
         <div class="row">
             <div class="col m-1" style="border: 1px solid black; border-radius: 10px; min-width: 300px">
                 <div class="text-center fs-5 fw-bold">
                     <label>Details</label>
                 </div>
+
+                <div class="row ps-3 pe-3 m-2">
+                    <div class="col-6" style="text-align:center">
+                        <button class="btn btn-primary btn-sm" type="submit" @onclick =@(() => SetSubmitType(nameof(Enums.SubmitType.Calculate)))>Calculate</button>
+                    </div>
+                    <div class="col" style="text-align:center">
+                        <button class="btn btn-primary btn-sm" type="submit" @onclick =@(() => SetSubmitType(nameof(Enums.SubmitType.Save)))>Save</button>
+                    </div>
+                </div>
+
                 <div class="form-control mb-1">
                     <div class="mt-1">
                         <ValidationMessage For="@(() => Model.ProjectName)" />
                         <label for="projectName" class="form-label">Project Name</label>
-                        <InputText id="projectName" @bind-Value="Model.ProjectName" class="form-control" />
+                        <InputText id="projectName" @bind-Value ="Model.ProjectName" class="form-control" />
                     </div>
 
                     <div class="mt-1">
                         <label for="description" class="form-label">Description</label>
-                        <InputText id="description" @bind-Value="Model.Description" class="form-control" />
+                        <InputText id="description" @bind-Value ="Model.Description" class="form-control" />
                     </div>
 
                     <div class="mt-1">
                         <ValidationMessage For="@(() => Model.MaterialThickness)" />
                         <label for="thickness" class="form-label">Material Thickness (mm)</label>
-                        <InputNumber TValue="double" id="thickness" @bind-Value="Model.MaterialThickness" class="form-control" />
+                        <InputNumber TValue="double" id="thickness" @bind-Value ="Model.MaterialThickness" class="form-control" />
                     </div>
 
                     <div class="mt-1">
                         <ValidationMessage For="@(() => Model.NumberOfPunches)" />
                         <label for="numberOfPunches" class="form-label">Number of Punches</label>
-                        <InputNumber TValue="int" id="numberOfPunches" @bind-Value="Model.NumberOfPunches" class="form-control" />
+                        <InputNumber TValue="int" id="numberOfPunches" @bind-Value ="Model.NumberOfPunches" class="form-control" />
                     </div>
 
                     <div class="mt-1">
                         <ValidationMessage For="@(() => Model.Perimeter)" />
                         <label for="perimeter" class="form-label">Perimeter (mm) "for a single punch"</label>
-                        <InputNumber TValue="double" id="perimeter" @bind-Value="Model.Perimeter" class="form-control" />
+                        <InputNumber TValue="double" id="perimeter" @bind-Value ="Model.Perimeter" class="form-control" />
                     </div>
 
                     <div class="mt-1">
-                        @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Tensile)) && String.IsNullOrWhiteSpace(CalcErrorMessage) == false)
-                        {
-                            <label style="color: red">@CalcErrorMessage</label>
-                            <br />
-                        }
+                    @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Tensile)) && String.IsNullOrWhiteSpace(CalcErrorMessage) == false)
+                    {
+                        <label style="color: red">@CalcErrorMessage</label>
+                        <br />
+                    }
                         <label for="tensileStrength" class="form-label ">Tensile Strength (MPA)</label>
-                        <InputNumber TValue="double" id="tensileStrength" @bind-Value="Model.TensileStrength" class="form-control" />
+                        <InputNumber TValue="double" id="tensileStrength" @bind-Value ="Model.TensileStrength" class="form-control" />
 
                     </div>
 
                     <div class="mt-1 mb-1">
-                        @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Shear)) && String.IsNullOrWhiteSpace(CalcErrorMessage) == false)
-                        {
-                            <label style="color: red">@CalcErrorMessage</label>
-                            <br />
-                        }
+                    @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Shear)) && String.IsNullOrWhiteSpace(CalcErrorMessage) == false)
+                    {
+                        <label style="color: red">@CalcErrorMessage</label>
+                        <br />
+                    }
                         <label for="shearStrength" class="form-label ">Shear Strength (MPA)</label>
-                        <InputNumber TValue="double" id="shearStrength" @bind-Value="Model.ShearStrength" class="form-control" />
+                        <InputNumber TValue="double" id="shearStrength" @bind-Value ="Model.ShearStrength" class="form-control" />
                     </div>
                 </div>
             </div>
 
+            @* Cutting force calculation based on whether Tensile or Shear strength to be used *@
             <div class="col m-1" style="border: 1px solid black; border-radius: 10px; min-width: 300px">
                 <div class="text-center fs-5 fw-bold">
                     <label>Calculation Type</label>
                 </div>
                 <div class="form-control mb-1">
                     <div class="form-control">
-                        @if (String.IsNullOrWhiteSpace(CalcTypeErrorMessage) == false)
-                        {
-                            <label style="color: red">@CalcTypeErrorMessage</label>
-                            <br />
-                        }
+                    @if (String.IsNullOrWhiteSpace(CalcTypeErrorMessage) == false)
+                    {
+                        <label style="color: red">@CalcTypeErrorMessage</label>
+                        <br />
+                    }
 
-                        <InputRadioGroup TValue="string" Name="calcType" @bind-Value:get="@Model.CalcType" @bind-Value:set="(Value) => SetCalcType(Value)">
+                        <InputRadioGroup TValue="string" Name="calcType" @bind-Value:get ="@Model.CalcType" @bind-Value:set ="(Value) => SetCalcType(Value)">
                             <div class="form-check form-check-inline">
                                 <InputRadio TValue="string" Value=@nameof(Enums.PierceAndBlankCalcType.Tensile) />
                                 <span> Tensile Strength &nbsp; </span>
@@ -98,23 +110,24 @@
                             <InputNumber TValue="double" id="percentOfTensileStrength" @bind-Value="Model.PercentageOfTensileStrength" class="form-control" />
                         </div>
 
-                        <div style="width: 100%">
-                            <img src="/Images/CuttingForceTensile.png" alt="Cutting Force Tensile" style="width: 100%"/>
+                        <div style="width: 100%; margin-left:10px">
+                            <img src="/Images/CuttingForceTensile.png" alt="Cutting Force Tensile" />
                             @* Image of Tensile formula and calculation go here *@
                         </div>
                     }
 
                     @if (Model.CalcType.Equals(nameof(Enums.PierceAndBlankCalcType.Shear)))
-                    {                        
+                    {
 
                         <div style="width: 100%">
-                            <img src="/Images/Cutting Force Shear.png" alt="Cutting Force Shear" style="width: 100%" />
+                            <img src="/Images/Cutting Force Shear.png" alt="Cutting Force Shear" />
                             @* Image of Shear strength formula and calculation go here *@
                         </div>
                     }
                 </div>
             </div>
 
+            @* Cutting force reduction due to punch sharpening *@
             <div class="col m-1" style="border: 1px solid black; border-radius: 10px; min-width: 300px">
 
                 <div class="text-center fs-5 fw-bold">
@@ -138,9 +151,21 @@
                             <span> Beveled </span>
                         </div>
                     </InputRadioGroup>
-
-
                 </div>
+
+                @if (Model.SharpeningProfileType.Equals(nameof(Enums.SharpeningProfileType.Beveled)))
+                {
+                    <div class="form-control mt-2">
+                        <ValidationMessage For="@(() => Model.CuttingForceReductionPercent)" />
+                        <label for="reductionCoefficient" class="form-label">Cutting Force Reduction Coefficient</label>
+                        <InputNumber TValue="double" id="reductionCoefficient" @bind-Value="Model.CuttingForceReductionPercent" class="form-control" />
+                    </div>
+
+                    <div style="width: 100%; text-align:center">
+                        <img src="/Images/Beveled Sharpening.png" alt="Cutting Force Beveled" />
+                        @* Image of Shear strength formula and calculation go here *@
+                    </div>
+                }
             </div>
 
             <div class="col m-1" style="border: 1px solid black; border-radius: 10px; min-width: 300px">
@@ -165,15 +190,10 @@
 
                         @* Stripper Content to go here *@
 
-                    </div>                   
+                    </div>
 
                 </div>
             </div>
-        </div>
-
-        <div>
-            <button type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Calculate)))>Calculate</button>
-            <button type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Save)))>Save</button>
         </div>
     </EditForm>
 
@@ -183,6 +203,11 @@
             <div>
                 <label for="cuttingForce">Cutting Force (N)</label>
                 <InputNumber TValue="double" id="cuttingForce" @bind-Value="Model.CuttingForce" />
+            </div>
+
+            <div>
+                <label for="reducedCuttingForce">Reduced Cutting Force (N)</label>
+                <InputNumber TValue="double" id="reducedCuttingForce" @bind-Value="Model.ReducedCuttingForce" />
             </div>
 
             <div>

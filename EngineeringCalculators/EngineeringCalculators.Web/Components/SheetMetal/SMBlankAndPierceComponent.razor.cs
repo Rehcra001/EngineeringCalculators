@@ -29,6 +29,10 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
             }
         }
 
+        private void SetSubmitType(string type)
+        {
+            _submitType = type;
+        }
 
         private async Task HandleValidSubmit()
         {
@@ -44,26 +48,47 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
 
         private void Calculate()
         {
-            if (ValidateCalcType() && ValidateSharpeningProfileType())
+            if (ValidateCalcType())
             {
-                if (Model.CalcType.Equals(nameof(Enums.Enums.PierceAndBlankCalcType.Tensile)) && ValidateTensileData())
-                {
-                    UseTensileCalC();
+                if (Model.CalcType.Equals(nameof(Enums.Enums.PierceAndBlankCalcType.Tensile)))
+                {                    
+                    if (ValidateTensileData())
+                    {
+                        UseTensileCalC();
+                    }
+                    else
+                    {
+                        return;
+                    }                    
                 }
-                else if (Model.CalcType.Equals(nameof(Enums.Enums.PierceAndBlankCalcType.Shear)) && ValidateShearData())
+                else if (Model.CalcType.Equals(nameof(Enums.Enums.PierceAndBlankCalcType.Shear)))
                 {
-                    UseShearCalc();
+                    if (ValidateShearData())
+                    {
+                        UseShearCalc();
+                    }
+                    else
+                    {
+                        return;
+                    }                    
                 }
                 else
                 {
                     return;
                 }
+            }
+            else
+            {
+                return;
+            }
+
+            if (ValidateSharpeningProfileType()) { 
 
                 if (Model.SharpeningProfileType.Equals(nameof(Enums.Enums.SharpeningProfileType.Flat)))
                 {
                     UseFlatProfileCalc();
                 }
-                else if (Model.SharpeningProfileType.Equals(nameof(Enums.Enums.SharpeningProfileType.Beveled)) && ValidateBeveledProfileData())
+                else if (Model.SharpeningProfileType.Equals(nameof(Enums.Enums.SharpeningProfileType.Beveled)))
                 {
                     UseBeveledProfileCalc();
                 }
@@ -73,33 +98,52 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
                     return;
                 }
             }
-        }
-
-        public async Task HandleSaveAsync()
-        {
-            await OnSave.InvokeAsync(Model);
-        }
-
-        private void SetForceReductionType(string reductionType)
-        {
-            Model.SharpeningProfileType = (string)reductionType;
-
-            
-
-            if (Model.SharpeningProfileType.Equals(nameof(Enums.Enums.SharpeningProfileType.Beveled)))
+            else
             {
-                ValidateBeveledProfileData();
+                Model.CuttingForce = 0;
+                return;
             }
         }
 
-        private bool ValidateBeveledProfileData()
+        private bool ValidateCalcType()
         {
-            if (Model.CuttingForceReductionPercent <= 0)
+            CalcTypeErrorMessage = "";
+
+            switch (Model.CalcType)
             {
-                CuttingForceReductionCalcErrorMessage = "Force reduction ratio must be a positive value";
-                return false;
+                case nameof(Enums.Enums.PierceAndBlankCalcType.Tensile):
+
+                    return true;
+                case nameof(Enums.Enums.PierceAndBlankCalcType.Shear):
+                    return true;
+                default:
+                    if (String.IsNullOrWhiteSpace(Model.CalcType))
+                    {
+                        CalcTypeErrorMessage = "Please select one of the options below to perform a calculation";
+                        
+                    }
+                    return false;
             }
-            return true;
+        }        
+
+        private void UseTensileCalC()
+        {
+            double result = Model.PercentageOfTensileStrength * Model.TensileStrength;
+            result *= Model.MaterialThickness;
+            result *= Model.Perimeter;
+            result *= Model.NumberOfPunches;
+
+            Model.CuttingForce = Math.Round(result,3);
+        }
+
+        private void UseShearCalc()
+        {
+            double result = Model.ShearStrength;
+            result *= Model.MaterialThickness;
+            result *= Model.Perimeter;
+            result *= Model.NumberOfPunches;
+
+            Model.CuttingForce = Math.Round(result, 3);
         }
 
         private bool ValidateSharpeningProfileType()
@@ -122,12 +166,24 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
             }
         }
 
+        private void UseFlatProfileCalc()
+        {
+            //No reduction in cutting force
+            Model.ReducedCuttingForce = Model.CuttingForce;
+        }
+
+        private void UseBeveledProfileCalc()
+        {
+            double result = Model.CuttingForce;
+            result *= Model.CuttingForceReductionPercent;
+
+            Model.ReducedCuttingForce = Math.Round(result, 3);
+        }
+
         private void SetCalcType(string calcType)
         {
             Model.CalcType = (string)calcType;
-
-            CalcErrorMessage = "";
-
+            CalcTypeErrorMessage = "";
             //Will use tensile strength
             if (Model.CalcType.Equals(nameof(Enums.Enums.PierceAndBlankCalcType.Tensile)))
             {
@@ -140,81 +196,10 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
             }
         }
 
-        private void SetStripperType(string stripperType)
-        {
-            Model.StripperType = (string)stripperType;
-
-            StripperTypeErrorMessage = "";
-        }
-
-        
-
-        private void UseFlatProfileCalc()
-        {
-            //No reduction in cutting force
-            Model.ReducedCuttingForce = Model.CuttingForce;
-        }
-
-        private void UseBeveledProfileCalc()
-        {
-            double result = Model.CuttingForce;
-            result *= Model.CuttingForceReductionPercent;
-
-            Model.ReducedCuttingForce = result;
-        }
-
-        private void UseShearCalc()
-        {
-            double result = Model.ShearStrength;
-            result *= Model.MaterialThickness;
-            result *= Model.Perimeter;
-            result *= Model.NumberOfPunches;
-
-            Model.CuttingForce = result;
-        }
-
-        private void UseTensileCalC()
-        {
-            double result = Model.PercentageOfTensileStrength * Model.TensileStrength;
-            result *= Model.MaterialThickness;
-            result *= Model.Perimeter;
-            result *= Model.NumberOfPunches;
-
-            Model.CuttingForce = result;
-        }
-
-        private bool ValidateCalcType()
-        {
-            CalcTypeErrorMessage = "";
-
-            switch (Model.CalcType)
-            {
-                case nameof(Enums.Enums.PierceAndBlankCalcType.Tensile):
-                    return true;
-                case nameof(Enums.Enums.PierceAndBlankCalcType.Shear):
-                    return true;
-                default:
-                    if (String.IsNullOrWhiteSpace(Model.CalcType))
-                    {
-                        CalcTypeErrorMessage = "Please select one of the options below to perform a calculation";
-                       
-                    }
-                    return false;
-            }
-        }
-
-        private bool ValidateShearData()
-        {
-            if (Model.ShearStrength <= 0)
-            {
-                CalcErrorMessage = "Shear Strength must be a positive value";
-                return false;
-            }
-            return true;
-        }
-
         private bool ValidateTensileData()
         {
+            CalcErrorMessage = "";
+
             if (Model.TensileStrength <= 0)
             {
                 CalcErrorMessage = "Tensile Strength must be a positive value";
@@ -223,11 +208,54 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
             return true;
         }
 
-        
-
-        private void SetSubmitType(string type)
+        private bool ValidateShearData()
         {
-            _submitType = type;
+            CalcErrorMessage = "";
+
+            if (Model.ShearStrength <= 0)
+            {
+                CalcErrorMessage = "Shear Strength must be a positive value";
+                return false;
+            }
+            return true;
         }
+
+        private void SetForceReductionType(string reductionType)
+        {
+            Model.SharpeningProfileType = (string)reductionType;
+
+            CuttingForceReductionTypeErrorMessage = "";
+
+            if (Model.SharpeningProfileType.Equals(nameof(Enums.Enums.SharpeningProfileType.Beveled)))
+            {
+                ValidateBeveledProfileData();
+            }
+        }
+
+        private bool ValidateBeveledProfileData()
+        {
+            CuttingForceReductionCalcErrorMessage = "";
+
+            if (Model.CuttingForceReductionPercent <= 0)
+            {
+                CuttingForceReductionCalcErrorMessage = "Force reduction constant must be a positive value";
+                return false;
+            }
+            return true;
+        }
+
+        private void SetStripperType(string stripperType)
+        {
+            Model.StripperType = (string)stripperType;
+
+            StripperTypeErrorMessage = "";
+        }
+
+        public async Task HandleSaveAsync()
+        {
+            await OnSave.InvokeAsync(Model);
+        }
+
+
     }
 }
