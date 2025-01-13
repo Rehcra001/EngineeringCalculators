@@ -10,4 +10,12 @@ File System API and File System Access API will be used to save and retrieve the
 
 This will limit the client to using EDGE or Chrome browsers only. Firefox, Safari, Android os and Apple mobile os are not yet supported
 
+# Features Completed
+
+1: Material Database - As this is PWA SPA each user will need to add their own material
+![image](https://github.com/user-attachments/assets/e94f750e-996a-4617-a47a-d51acbcbe053)
+
+
+2: In Progress
+  - Sheet Metal Calculator
 
