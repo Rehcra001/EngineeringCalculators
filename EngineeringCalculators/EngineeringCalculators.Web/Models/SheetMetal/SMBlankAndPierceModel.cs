@@ -44,6 +44,7 @@ namespace EngineeringCalculators.Web.Models.SheetMetal
 
 
         public double StrippingForce { get; set; }
+        public double StrippingConstant { get; set; } = 0.10;
 
         public double Clearance { get; set; }
     }

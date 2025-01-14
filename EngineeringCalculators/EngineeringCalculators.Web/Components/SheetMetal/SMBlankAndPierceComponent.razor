@@ -156,7 +156,7 @@
                 @if (Model.SharpeningProfileType.Equals(nameof(Enums.SharpeningProfileType.Flat)))
                 {
                     <div style="width: 100%; text-align:center">
-                        <img src="/Images/Flat Face.png" alt="Cutting Force Flat" style="width:100%"/>
+                        <img src="/Images/Flat Face.png" alt="Cutting Force Flat" style="width:100%" />
                     </div>
                 }
 
@@ -196,8 +196,100 @@
 
                         @* Stripper Content to go here *@
 
-                    </div>
+                        <div>
+                            <div class="form-control mt-2">
+                                @* <ValidationMessage For="@(() => Model.StrippingConstant)" /> *@
+                                <label for="strippingConstant" class="form-label">Stripping Constant</label>
+                                <InputNumber TValue="double" id="strippingConstant" @bind-Value="Model.StrippingConstant" class="form-control" />
+                            </div>
+                            <div>
+                                <label>F<sub>s</sub> = C<sub>s</sub> * F</label>
+                            </div>
+                            <div>
+                                <label>Where:</label>
+                            </div>
+                            <div>
+                                <label>C<sub>s</sub> = Stripping Constant</label>
+                            </div>
+                            <div>
+                                <label>F = Punch Force</label>
+                            </div>
+                            
+                        </div>
+                        <div class="text-center">
+                            <label style="font-weight: bolder; text-decoration: underline">Stripping Constant Tables</label>
+                                </div>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="width:50%; ">Material Thickness</th>
+                                        <th>Simple Punch/Blank</th>
+                                    </tr>
 
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Up to 1.0</td>
+                                        <td>0.02 to 0.06</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1.0 to 5.0</td>
+                                        <td>0.06 to 0.08</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Over 5.0</td>
+                                        <td>0.08 to 0.10</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="width:50%">Material Thickness</th>
+                                        <th>Compound Punch/Blank</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Up to 1.0</td>
+                                        <td>0.06 to 0.08</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1.0 to 5.0</td>
+                                        <td>0.08 to 0.12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Over 5.0</td>
+                                        <td>0.12 to 0.15</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <table class=" table table-sm ">
+                                <thead>
+                                    <tr>
+                                        <th style="width:50%">Material Thickness</th>
+                                        <th>Punch/Blank at same time</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Up to 1.0</td>
+                                        <td>0.10 to 0.12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1.0 to 5.0</td>
+                                        <td>0.12 to 0.15</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Over 5.0</td>
+                                        <td>0.15 to 0.20</td>
+                                    </tr>
+                                </tbody>
+                            </table>                  
+                    </div>
                 </div>
             </div>
         </div>
