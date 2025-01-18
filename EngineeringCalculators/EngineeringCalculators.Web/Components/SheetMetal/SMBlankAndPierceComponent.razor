@@ -1,5 +1,5 @@
 ﻿
-<div>
+<div class="container-fluid">
     <div class="text-center fs-4 fw-bold mb-3">
         <label>Cutting Force, Stripping Force and Clearance Calculations</label>
     </div>
@@ -7,21 +7,54 @@
 
     <EditForm Model="Model" FormName="BlankAndPierceCalculation" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
+        <div class="row" style="border: 1px solid black; border-radius: 10px;">
+            <div class="text-center fs-5 fw-bold">
+                <label>Results</label>
+            </div>
+
+            <div class="row ps-3 pe-3 m-2">
+                <div class="col-6" style="text-align:center">
+                    <button class="btn btn-primary btn-sm" type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Calculate)))>Calculate</button>
+                </div>
+                <div class="col" style="text-align:center">
+                    <button class="btn btn-primary btn-sm" type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Save)))>Save</button>
+                </div>
+                <hr class="mt-2"/>
+            </div>
+
+            <div class="row mb-1">
+                <div class="col m-1">
+                    <label for="cuttingForce" class="form-label text-nowrap">Cutting Force (N)</label>
+                    <InputNumber TValue="double" id="cuttingForce" @bind-Value="Model.CuttingForce" class="form-control" />
+                </div>
+
+                <div class="col m-1">
+                    <label for="reducedCuttingForce" class="form-label text-nowrap">Reduced Cutting Force (N)</label>
+                    <InputNumber TValue="double" id="reducedCuttingForce" @bind-Value="Model.ReducedCuttingForce" class="form-control" />
+                </div>
+
+                <div class="col m-1">
+                    <label for="strippingForce" class="form-label text-nowrap">Stripping Force</label>
+                    <InputNumber TValue="double" id="strippingForce" @bind-Value="Model.StrippingForce" class="form-control" />
+                </div>
+
+                <div class="col m-1">
+                    <label for="clearance" class="form-label text-nowrap">Total Clearance (2 x c)</label>
+                    <InputNumber TValue="double" id="clearance" @bind-Value="Model.Clearance" class="form-control" />
+                </div>
+                <div class="col m-1">
+                    <label for="powerRequirement" class="form-label text-nowrap">Press Requirement (tons)</label>
+                    <InputNumber TValue="double" id="powerRequirement" @bind-Value="Model.PressTonnageRequirements" class="form-control" />
+                </div>
+            </div>
+        </div>
+        
 
         <div class="row justify-content-center">
             <div class="col m-1" style="border: 1px solid black; border-radius: 10px; max-width: 300px; min-width: 250px">
                 <div class="text-center fs-5 fw-bold">
                     <label>Details</label>
-                </div>
-
-                <div class="row ps-3 pe-3 m-2">
-                    <div class="col-6" style="text-align:center">
-                        <button class="btn btn-primary btn-sm" type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Calculate)))>Calculate</button>
-                    </div>
-                    <div class="col" style="text-align:center">
-                        <button class="btn btn-primary btn-sm" type="submit" @onclick=@(() => SetSubmitType(nameof(Enums.SubmitType.Save)))>Save</button>
-                    </div>
-                </div>
+                </div>                
 
                 <div class="form-control mb-1">
                     <div class="mt-1">
@@ -72,6 +105,12 @@
                         }
                         <label for="shearStrength" class="form-label ">Shear Strength (MPA)</label>
                         <InputNumber TValue="double" id="shearStrength" @bind-Value="Model.ShearStrength" class="form-control" />
+                    </div>
+
+                    <div class="mt-1 mb-1">
+                        <ValidationMessage For="@(() => Model.SafetyFactor)"/>
+                        <label for="safetyFactor" class="form-label ">Press Tonnage Safety Factor</label>
+                        <InputNumber TValue="double" id="safetyFactor" @bind-Value="Model.SafetyFactor" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -317,30 +356,6 @@
 
     </EditForm>
 
-    <div>
-        <fieldset>
-            <legend>Results</legend>
-            <div>
-                <label for="cuttingForce">Cutting Force (N)</label>
-                <InputNumber TValue="double" id="cuttingForce" @bind-Value="Model.CuttingForce" />
-            </div>
-
-            <div>
-                <label for="reducedCuttingForce">Reduced Cutting Force (N)</label>
-                <InputNumber TValue="double" id="reducedCuttingForce" @bind-Value="Model.ReducedCuttingForce" />
-            </div>
-
-            <div>
-                <label for="strippingForce">Stripping Force</label>
-                <InputNumber TValue="double" id="strippingForce" @bind-Value="Model.StrippingForce" />
-            </div>
-
-            <div>
-                <label for="clearance">Total Clearance (2 x c)</label>
-                <InputNumber TValue="double" id="clearance" @bind-Value="Model.Clearance" />
-            </div>
-        </fieldset>
-    </div>
 
 </div>
 

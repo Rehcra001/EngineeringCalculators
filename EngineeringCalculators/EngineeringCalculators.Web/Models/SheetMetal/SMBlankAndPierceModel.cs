@@ -49,5 +49,9 @@ namespace EngineeringCalculators.Web.Models.SheetMetal
         public double Clearance { get; set; }
         [Range(0.005, 0.035, ErrorMessage = "Must be greater than or equal to 0.005 and less than or equal to 0.035")]
         public double ClearanceConstant { get; set; } = 0.01;
+
+        [Range(1, double.MaxValue, ErrorMessage = "Must be greater than or equal to 1")]
+        public double SafetyFactor { get; set; } = 1.3;
+        public double PressTonnageRequirements { get; set; }
     }
 }
