@@ -1,0 +1,12 @@
+﻿<div>
+    <EditForm Model="Model" FormName="SMHeader" OnValidSubmit="HandleSubmit">
+        <div>
+            <label for="projectName">Project Name</label>
+            <InputText id="projectName" @bind-Value="Model.ProjectName"/>
+        </div>
+        <div>
+            <label for="description">Description</label>
+            <InputText id="description" @bind-Value="Model.Description" />
+        </div>
+    </EditForm>
+</div>
