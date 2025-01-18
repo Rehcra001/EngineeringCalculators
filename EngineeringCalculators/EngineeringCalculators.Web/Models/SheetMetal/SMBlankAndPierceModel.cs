@@ -36,8 +36,6 @@ namespace EngineeringCalculators.Web.Models.SheetMetal
         public double CuttingForce { get; set; }
 
         public double ReducedCuttingForce { get; set; }
-
-        [Range(0.001, 1, ErrorMessage = "Must be greater than 0 and less than or equal to 1")]
         public double CuttingForceReductionPercent { get; set; } = 0.6;
 
         public string SharpeningProfileType { get; set; } = string.Empty;

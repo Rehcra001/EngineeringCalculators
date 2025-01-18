@@ -202,7 +202,10 @@
                 @if (Model.SharpeningProfileType.Equals(nameof(Enums.SharpeningProfileType.Beveled)))
                 {
                     <div class="form-control mt-2">
-                        <ValidationMessage For="@(() => Model.CuttingForceReductionPercent)" />
+                        @if (String.IsNullOrWhiteSpace(CuttingForceReductionCalcErrorMessage) == false){
+                            <label style="color: red">@CuttingForceReductionCalcErrorMessage</label>
+                            <br />
+                        }
                         <label for="reductionCoefficient" class="form-label">Cutting Force Reduction Coefficient</label>
                         <InputNumber TValue="double" id="reductionCoefficient" @bind-Value="Model.CuttingForceReductionPercent" class="form-control" />
                     </div>

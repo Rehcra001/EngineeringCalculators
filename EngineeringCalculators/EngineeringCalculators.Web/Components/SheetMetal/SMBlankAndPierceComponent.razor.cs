@@ -92,7 +92,15 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
                 }
                 else if (Model.SharpeningProfileType.Equals(nameof(Enums.Enums.SharpeningProfileType.Beveled)))
                 {
-                    UseBeveledProfileCalc();
+                    if (ValidateBeveledProfileData())
+                    {
+                        UseBeveledProfileCalc();
+                    }
+                    else
+                    {
+                        return;
+                    }
+                    
                 }
                 else
                 {
