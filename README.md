@@ -19,7 +19,8 @@ This will limit the client to using EDGE or Chrome browsers only. Firefox, Safar
 2: In Progress
   - Sheet Metal Calculator
     - Cutting force, stripping force, clearance and press tonnage requirements Component Completed
-      ![image](https://github.com/user-attachments/assets/eb9346d3-a03a-408e-b710-59606340c25e)
+      ![image](https://github.com/user-attachments/assets/d1a2a902-314d-469b-9301-370e2bbe313f)
+
 
 
 
