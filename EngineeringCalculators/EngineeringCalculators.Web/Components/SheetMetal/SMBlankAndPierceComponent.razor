@@ -1,5 +1,5 @@
 ﻿
-<div class="container-fluid">
+<div class="container">
     <div class="text-center fs-4 fw-bold mb-3">
         <label>Cutting Force, Stripping Force and Clearance Calculations</label>
     </div>
@@ -7,7 +7,7 @@
 
     <EditForm Model="Model" FormName="BlankAndPierceCalculation" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
-        <div class="row" style="border: 1px solid black; border-radius: 10px;">
+        <div class="row mb-2" style="border: 1px solid black; border-radius: 10px;">
             <div class="text-center fs-5 fw-bold">
                 <label>Results</label>
             </div>
@@ -34,12 +34,12 @@
                 </div>
 
                 <div class="col m-1">
-                    <label for="strippingForce" class="form-label text-nowrap">Stripping Force</label>
+                    <label for="strippingForce" class="form-label text-nowrap">Stripping Force (N)</label>
                     <InputNumber TValue="double" id="strippingForce" @bind-Value="Model.StrippingForce" class="form-control" />
                 </div>
 
                 <div class="col m-1">
-                    <label for="clearance" class="form-label text-nowrap">Total Clearance (2 x c)</label>
+                    <label for="clearance" class="form-label text-nowrap">Total Clearance (2 x c) (mm)</label>
                     <InputNumber TValue="double" id="clearance" @bind-Value="Model.Clearance" class="form-control" />
                 </div>
                 <div class="col m-1">
@@ -122,11 +122,7 @@
                 </div>
                 <div class="form-control mb-1">
                     <div class="form-control">
-                        @if (String.IsNullOrWhiteSpace(CalcTypeErrorMessage) == false)
-                        {
-                            <label style="color: red">@CalcTypeErrorMessage</label>
-                            <br />
-                        }
+                        <ValidationMessage For="@(() => Model.CalcType)" />
 
                         <InputRadioGroup TValue="string" Name="calcType" @bind-Value:get="@Model.CalcType" @bind-Value:set="(Value) => SetCalcType(Value)">
                             <div class="form-check form-check-inline">
@@ -173,12 +169,7 @@
                     <label>Sharpening Profile Type</label>
                 </div>
                 <div class="form-control mb-1">
-                    @if (String.IsNullOrWhiteSpace(CuttingForceReductionTypeErrorMessage) == false)
-                    {
-                        <label style="color: red">@CuttingForceReductionTypeErrorMessage</label>
-                        <br />
-                    }
-
+                    <ValidationMessage For="@(() => Model.SharpeningProfileType)" />
                     <InputRadioGroup TValue="string" Name="reductionForceType" @bind-Value:get="@Model.SharpeningProfileType" @bind-Value:set="(Value) => SetForceReductionType(Value)">
                         <div class="form-check form-check-inline" style="width: 50%">
                             <InputRadio TValue="string" Value=@nameof(Enums.SharpeningProfileType.Flat) />
@@ -222,6 +213,7 @@
                 </div>
                 <div class="form-control mb-1">
                     <div class="form-control ">
+                        <ValidationMessage For="@(() => Model.StripperType)"/>
                         <InputRadioGroup TValue="string" Name="stripperType" @bind-Value:get="@Model.StripperType" @bind-Value:set="(Value) => SetStripperType(Value)">
                             <div class="form-check form-check-inline" style="width: 50%">
                                 <InputRadio TValue="string" Value=@nameof(Enums.StripperType.Solid) />
@@ -240,7 +232,7 @@
 
                         <div>
                             <div class="form-control mt-2">
-                                @* <ValidationMessage For="@(() => Model.StrippingConstant)" /> *@
+                                <ValidationMessage For="@(() => Model.StrippingConstant)" />
                                 <label for="strippingConstant" class="form-label">Stripping Constant</label>
                                 <InputNumber TValue="double" id="strippingConstant" @bind-Value="Model.StrippingConstant" class="form-control" />
                             </div>
@@ -248,7 +240,7 @@
                                 <label>F<sub>s</sub> = C<sub>s</sub> * F</label>
                             </div>
                             <div>
-                                <label>Where:</label>
+                                <label class="fw-bold">Where:</label>
                             </div>
                             <div>
                                 <label>C<sub>s</sub> = Stripping Constant</label>
