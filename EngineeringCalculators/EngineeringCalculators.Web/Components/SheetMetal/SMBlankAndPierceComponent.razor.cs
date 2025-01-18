@@ -51,7 +51,7 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
             if (ValidateCalcType())
             {
                 if (Model.CalcType.Equals(nameof(Enums.Enums.PierceAndBlankCalcType.Tensile)))
-                {                    
+                {
                     if (ValidateTensileData())
                     {
                         UseTensileCalC();
@@ -59,7 +59,7 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
                     else
                     {
                         return;
-                    }                    
+                    }
                 }
                 else if (Model.CalcType.Equals(nameof(Enums.Enums.PierceAndBlankCalcType.Shear)))
                 {
@@ -70,19 +70,21 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
                     else
                     {
                         return;
-                    }                    
+                    }
                 }
                 else
                 {
                     return;
                 }
+                Model.Clearance = Math.Round(CalculateClearance(), 3);
             }
             else
             {
                 return;
             }
 
-            if (ValidateSharpeningProfileType()) { 
+            if (ValidateSharpeningProfileType())
+            {
 
                 if (Model.SharpeningProfileType.Equals(nameof(Enums.Enums.SharpeningProfileType.Flat)))
                 {
@@ -105,6 +107,8 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
             }
         }
 
+        
+
         private bool ValidateCalcType()
         {
             CalcTypeErrorMessage = "";
@@ -120,11 +124,11 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
                     if (String.IsNullOrWhiteSpace(Model.CalcType))
                     {
                         CalcTypeErrorMessage = "Please select one of the options below to perform a calculation";
-                        
+
                     }
                     return false;
             }
-        }        
+        }
 
         private void UseTensileCalC()
         {
@@ -133,7 +137,7 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
             result *= Model.Perimeter;
             result *= Model.NumberOfPunches;
 
-            Model.CuttingForce = Math.Round(result,3);
+            Model.CuttingForce = Math.Round(result, 3);
         }
 
         private void UseShearCalc()
@@ -144,6 +148,43 @@ namespace EngineeringCalculators.Web.Components.SheetMetal
             result *= Model.NumberOfPunches;
 
             Model.CuttingForce = Math.Round(result, 3);
+        }
+
+        private double CalculateClearance()
+        {
+            switch (Model.CalcType)
+            {
+                case nameof(Enums.Enums.PierceAndBlankCalcType.Tensile):
+                    return UseTensileClearanceCalc();
+                case nameof(Enums.Enums.PierceAndBlankCalcType.Shear):
+                    return UseShearClearanceCalc();
+                default:
+                    return 0;
+            }
+        }
+
+        private double UseTensileClearanceCalc()
+        {
+            double result;
+            result = Model.ClearanceConstant * Model.MaterialThickness;
+            result *= Math.Sqrt(Model.PercentageOfTensileStrength * Model.TensileStrength);
+            //6.32 is constant for this type of calculation and does not change
+            result /= 6.32;
+            //return the total clearance
+            result *= 2;
+            return result;
+        }
+
+        private double UseShearClearanceCalc()
+        {
+            double result;
+            result = Model.ClearanceConstant * Model.MaterialThickness;
+            result *= Math.Sqrt(Model.ShearStrength);
+            //6.32 is constant for this type of calculation and does not change
+            result /= 6.32;
+            //return the total clearance
+            result *= 2;
+            return result;
         }
 
         private bool ValidateSharpeningProfileType()

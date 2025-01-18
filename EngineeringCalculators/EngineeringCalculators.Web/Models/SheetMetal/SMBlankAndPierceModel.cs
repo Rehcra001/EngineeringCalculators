@@ -47,5 +47,7 @@ namespace EngineeringCalculators.Web.Models.SheetMetal
         public double StrippingConstant { get; set; } = 0.10;
 
         public double Clearance { get; set; }
+        [Range(0.005, 0.035, ErrorMessage = "Must be greater than or equal to 0.005 and less than or equal to 0.035")]
+        public double ClearanceConstant { get; set; } = 0.01;
     }
 }

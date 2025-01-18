@@ -8,8 +8,8 @@
     <EditForm Model="Model" FormName="BlankAndPierceCalculation" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
 
-        <div class="row">
-            <div class="col m-1" style="border: 1px solid black; border-radius: 10px; min-width: 300px">
+        <div class="row justify-content-center">
+            <div class="col m-1" style="border: 1px solid black; border-radius: 10px; max-width: 300px; min-width: 250px">
                 <div class="text-center fs-5 fw-bold">
                     <label>Details</label>
                 </div>
@@ -77,7 +77,7 @@
             </div>
 
             @* Cutting force calculation based on whether Tensile or Shear strength to be used *@
-            <div class="col m-1" style="border: 1px solid black; border-radius: 10px; min-width: 300px">
+            <div class="col m-1" style="border: 1px solid black; border-radius: 10px; max-width: 300px; min-width: 250px">
                 <div class="text-center fs-5 fw-bold">
                     <label>Calculation Type</label>
                 </div>
@@ -111,7 +111,7 @@
                         </div>
 
                         <div style="width: 100%; text-align:center">
-                            <img src="/Images/CuttingForceTensile.png" alt="Cutting Force Tensile" style="width:100%" />
+                            <img src="/Images/Sheet Metal/CuttingForceTensile.png" alt="Cutting Force Tensile" style="width:100%" />
                             @* Image of Tensile formula and calculation go here *@
                         </div>
                     }
@@ -120,7 +120,7 @@
                     {
 
                         <div style="width: 100%; text-align:center">
-                            <img src="/Images/Cutting Force Shear.png" alt="Cutting Force Shear" style="width:100%" />
+                            <img src="/Images/Sheet Metal/Cutting Force Shear.png" alt="Cutting Force Shear" style="width:100%" />
                             @* Image of Shear strength formula and calculation go here *@
                         </div>
                     }
@@ -128,7 +128,7 @@
             </div>
 
             @* Cutting force reduction due to punch sharpening *@
-            <div class="col m-1" style="border: 1px solid black; border-radius: 10px; min-width: 300px">
+            <div class="col m-1" style="border: 1px solid black; border-radius: 10px; max-width: 300px; min-width: 250px">
 
                 <div class="text-center fs-5 fw-bold">
                     <label>Sharpening Profile Type</label>
@@ -156,7 +156,7 @@
                 @if (Model.SharpeningProfileType.Equals(nameof(Enums.SharpeningProfileType.Flat)))
                 {
                     <div style="width: 100%; text-align:center">
-                        <img src="/Images/Flat Face.png" alt="Cutting Force Flat" style="width:100%" />
+                        <img src="/Images/Sheet Metal/Flat Face.png" alt="Cutting Force Flat" style="width:100%" />
                     </div>
                 }
 
@@ -169,12 +169,12 @@
                     </div>
 
                     <div style="width: 100%; text-align:center">
-                        <img src="/Images/Beveled Sharpening.png" alt="Cutting Force Beveled" style="width:100%" />
+                        <img src="/Images/Sheet Metal/Beveled Sharpening.png" alt="Cutting Force Beveled" style="width:100%" />
                     </div>
                 }
             </div>
 
-            <div class="col m-1" style="border: 1px solid black; border-radius: 10px; min-width: 300px">
+            <div class="col m-1" style="border: 1px solid black; border-radius: 10px; max-width: 300px; min-width: 250px">
                 <div class="text-center fs-5 fw-bold">
                     <label>Stripper Type</label>
                 </div>
@@ -214,85 +214,107 @@
                             <div>
                                 <label>F = Punch Force</label>
                             </div>
-                            
+
                         </div>
                         <div class="text-center">
-                            <label style="font-weight: bolder; text-decoration: underline">Stripping Constant Tables</label>
-                                </div>
-                            <table class="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th style="width:50%; ">Material Thickness</th>
-                                        <th>Simple Punch/Blank</th>
-                                    </tr>
+                            <label style="font-weight: bolder; text-decoration: underline">Stripping Constant Table</label>
+                        </div>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th style="width:50%; ">Material Thickness</th>
+                                    <th>Simple Punch/Blank</th>
+                                </tr>
 
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Up to 1.0</td>
-                                        <td>0.02 to 0.06</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1.0 to 5.0</td>
-                                        <td>0.06 to 0.08</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Over 5.0</td>
-                                        <td>0.08 to 0.10</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Up to 1.0</td>
+                                    <td>0.02 to 0.06</td>
+                                </tr>
+                                <tr>
+                                    <td>1.0 to 5.0</td>
+                                    <td>0.06 to 0.08</td>
+                                </tr>
+                                <tr>
+                                    <td>Over 5.0</td>
+                                    <td>0.08 to 0.10</td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                            <table class="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th style="width:50%">Material Thickness</th>
-                                        <th>Compound Punch/Blank</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Up to 1.0</td>
-                                        <td>0.06 to 0.08</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1.0 to 5.0</td>
-                                        <td>0.08 to 0.12</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Over 5.0</td>
-                                        <td>0.12 to 0.15</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th style="width:50%">Material Thickness</th>
+                                    <th>Compound Punch/Blank</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Up to 1.0</td>
+                                    <td>0.06 to 0.08</td>
+                                </tr>
+                                <tr>
+                                    <td>1.0 to 5.0</td>
+                                    <td>0.08 to 0.12</td>
+                                </tr>
+                                <tr>
+                                    <td>Over 5.0</td>
+                                    <td>0.12 to 0.15</td>
+                                </tr>
+                            </tbody>
+                        </table>
 
-                            <table class=" table table-sm ">
-                                <thead>
-                                    <tr>
-                                        <th style="width:50%">Material Thickness</th>
-                                        <th>Punch/Blank at same time</th>
-                                    </tr>
+                        <table class=" table table-sm ">
+                            <thead>
+                                <tr>
+                                    <th style="width:50%">Material Thickness</th>
+                                    <th>Punch/Blank at same time</th>
+                                </tr>
 
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Up to 1.0</td>
-                                        <td>0.10 to 0.12</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1.0 to 5.0</td>
-                                        <td>0.12 to 0.15</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Over 5.0</td>
-                                        <td>0.15 to 0.20</td>
-                                    </tr>
-                                </tbody>
-                            </table>                  
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Up to 1.0</td>
+                                    <td>0.10 to 0.12</td>
+                                </tr>
+                                <tr>
+                                    <td>1.0 to 5.0</td>
+                                    <td>0.12 to 0.15</td>
+                                </tr>
+                                <tr>
+                                    <td>Over 5.0</td>
+                                    <td>0.15 to 0.20</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+
+            @* Clearance Content *@
+            <div class="col m-1" style="border: 1px solid black; border-radius: 10px; max-width: 300px; min-width: 250px">
+                <div class="text-center fs-5 fw-bold">
+                    <label>Clearance</label>
+                </div>
+
+                <div class="form-control mt-2">
+                    <ValidationMessage For="@(() => Model.ClearanceConstant)" />
+                    <label for="ClearanceConstant" class="form-label">k Value Constant</label>
+                    <InputNumber TValue="double" id="ClearanceConstant" @bind-Value="Model.ClearanceConstant" class="form-control" />
+                </div>
+
+                <div class="form-control mb-1">
+                    <div style="width: 100%; text-align:center">
+                        <img src="/Images/Sheet Metal/Clearance.png" alt="Clearance" style="width:100%" />
+                    </div>
+                </div>
+
+            </div>
         </div>
+
+
     </EditForm>
 
     <div>
@@ -314,7 +336,7 @@
             </div>
 
             <div>
-                <label for="clearance">Clearance</label>
+                <label for="clearance">Total Clearance (2 x c)</label>
                 <InputNumber TValue="double" id="clearance" @bind-Value="Model.Clearance" />
             </div>
         </fieldset>
