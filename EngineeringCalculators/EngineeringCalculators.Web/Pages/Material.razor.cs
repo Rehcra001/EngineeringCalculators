@@ -15,6 +15,7 @@ namespace EngineeringCalculators.Web.Pages
         private string _selectedCategory = "All";
         private bool _canSave = true;
         private bool _disabled = false;
+        private bool _canDelete = false;
 
         [Inject]
         public required IMaterialService MaterialService { get; set; }
@@ -62,49 +63,58 @@ namespace EngineeringCalculators.Web.Pages
 
             if (confirmed)
             {
+                _canDelete = true;
                 _materials.Remove(_material);
                 await HandleSaveAsync(_material);
                 _material = new();
             }
-            
+            _canDelete = false;
         }
 
         private async Task HandleSaveAsync(MaterialModel material)
         {
-            if (String.IsNullOrWhiteSpace(material.Category))
+            if (IsUniqueMaterial(material) || _canSave || _canDelete)
             {
-                material.Category = "--";
-            }
-
-            if (material.Id == 0) // New Material
-            {
-                if (_materials.Count == 0)
+                if (String.IsNullOrWhiteSpace(material.Category))
                 {
-                    material.Id = 1;
+                    material.Category = "--";
+                }
+
+                if (material.Id == 0) // New Material
+                {
+                    if (_materials.Count == 0)
+                    {
+                        material.Id = 1;
+                    }
+                    else
+                    {
+                        int max = _materials.Max(x => x.Id);
+                        material.Id = max + 1;
+                    }
+                    _materials.Add(material);
+                }
+
+                if (MaterialService.FileHandle is null)
+                {
+                    await MaterialService.SaveAllAsync(_materials);
                 }
                 else
                 {
-                    int max = _materials.Max(x => x.Id);
-                    material.Id = max + 1;
+                    await MaterialService.UpdateAsync(_materials);
                 }
-                _materials.Add(material);
-            }
 
-            if (MaterialService.FileHandle is null)
-            {
-                await MaterialService.SaveAllAsync(_materials);
+                _canSave = false;
+                _disabled = true;
+
+                HandleFilterByCategory(_selectedCategory);
+
+                GetCategories();
             }
             else
             {
-                await MaterialService.UpdateAsync(_materials);
+                throw new Exception();
             }
-
-            _canSave = false;
-            _disabled = true;
-
-            HandleFilterByCategory(_selectedCategory);
-
-            GetCategories();
+            
         }
 
         private void HandleEdit()
@@ -142,6 +152,15 @@ namespace EngineeringCalculators.Web.Pages
         {
             _searchText = "";
             HandleFilterByCategory(_selectedCategory);
+        }
+
+        private bool IsUniqueMaterial(MaterialModel material)
+        {
+            string newName = material.Name;
+
+            bool isUnique = _materials.Where(x => x.Name.ToLower().Equals(newName.ToLower())).Any() == false;
+
+            return isUnique;
         }
 
         private void GetCategories()
