@@ -22,6 +22,17 @@ namespace EngineeringCalculators.Web.Pages
         [Inject]
         public required IJSRuntime _jSRuntime { get; set; }
 
+        protected override async Task OnInitializedAsync()
+        {
+            if (MaterialService.FileHandle is not null)
+            {
+                _materials = await MaterialService.GetAllMemoryAsync();
+                _filteredMaterial = _materials;
+                SortMaterialByName();
+                GetCategories();
+            }
+        }
+
         private void HandleSelectedMaterial(MaterialModel material)
         {
             _material = material;

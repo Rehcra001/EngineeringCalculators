@@ -1,4 +1,5 @@
 ﻿using EngineeringCalculators.Web.Models;
+using EngineeringCalculators.Web.Pages;
 using EngineeringCalculators.Web.Services.Contracts;
 using KristofferStrube.Blazor.FileSystem;
 using KristofferStrube.Blazor.FileSystemAccess;
@@ -78,6 +79,20 @@ namespace EngineeringCalculators.Web.Services
                     await ReadFileAsync();
                 }
             }
+        }
+
+        public async Task<List<MaterialModel>> GetAllMemoryAsync()
+        {
+            List<MaterialModel> materials = [];
+
+            await ReadFileAsync();
+
+            if (String.IsNullOrWhiteSpace(_fileText) == false)
+            {
+                materials = JsonSerializer.Deserialize<List<MaterialModel>>(_fileText)!;
+            }
+
+            return materials;
         }
 
         public async Task<List<MaterialModel>> GetAllAsync()
