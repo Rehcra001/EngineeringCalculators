@@ -107,7 +107,7 @@
 
 
                 <div style="padding: 10px; ">
-                    <MaterialDataComponent MaterialData="_material" CanSave="_canSave" Disabled="_disabled" OnSave="(material) => HandleSaveAsync(material)"></MaterialDataComponent>
+                    <MaterialDataComponent MaterialData="_material" ErrorMessage="@_newMaterialErrorMessage" CanSave="_canSave" Disabled="_disabled" OnSave="(material) => HandleSaveAsync(material)"></MaterialDataComponent>
                 </div>
             </fieldset>
         </div>

@@ -11,6 +11,11 @@
     <ValidationSummary/>    
 
     <div>
+        @if (String.IsNullOrWhiteSpace(ErrorMessage) == false)
+        {
+            <label for="name" style="color: red">@ErrorMessage</label>
+            <br/>
+        }
         <label for="name">Name</label>
         <InputText id="name" @bind-Value="MaterialData.Name" class="form-control mb-3" disabled="@Disabled"/>
     </div>
@@ -81,6 +86,9 @@
 
     [Parameter]
     public bool Disabled { get; set; }
+
+    [Parameter]
+    public string ErrorMessage { get; set; } = "";
 
     [Parameter]
     public EventCallback<MaterialModel> OnSave { get; set; }

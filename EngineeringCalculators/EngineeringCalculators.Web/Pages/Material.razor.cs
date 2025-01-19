@@ -16,6 +16,8 @@ namespace EngineeringCalculators.Web.Pages
         private bool _canSave = true;
         private bool _disabled = false;
         private bool _canDelete = false;
+        private bool _canSaveEdit = false;
+        private string _newMaterialErrorMessage = "";
 
         [Inject]
         public required IMaterialService MaterialService { get; set; }
@@ -73,7 +75,7 @@ namespace EngineeringCalculators.Web.Pages
 
         private async Task HandleSaveAsync(MaterialModel material)
         {
-            if (IsUniqueMaterial(material) || _canSave || _canDelete)
+            if (IsUniqueMaterial(material) || _canSaveEdit || _canDelete)
             {
                 if (String.IsNullOrWhiteSpace(material.Category))
                 {
@@ -104,6 +106,7 @@ namespace EngineeringCalculators.Web.Pages
                 }
 
                 _canSave = false;
+                _canSaveEdit = false;
                 _disabled = true;
 
                 HandleFilterByCategory(_selectedCategory);
@@ -112,7 +115,7 @@ namespace EngineeringCalculators.Web.Pages
             }
             else
             {
-                throw new Exception();
+                _newMaterialErrorMessage = "A material with this name already exists";
             }
             
         }
@@ -120,6 +123,7 @@ namespace EngineeringCalculators.Web.Pages
         private void HandleEdit()
         {
             _canSave = true;
+            _canSaveEdit = true;
             _disabled = false;
         }
 
@@ -156,6 +160,8 @@ namespace EngineeringCalculators.Web.Pages
 
         private bool IsUniqueMaterial(MaterialModel material)
         {
+            _newMaterialErrorMessage = "";
+
             string newName = material.Name;
 
             bool isUnique = _materials.Where(x => x.Name.ToLower().Equals(newName.ToLower())).Any() == false;
