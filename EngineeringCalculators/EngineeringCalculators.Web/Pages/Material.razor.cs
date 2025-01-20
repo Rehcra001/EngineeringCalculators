@@ -1,4 +1,5 @@
-﻿using EngineeringCalculators.Web.Models;
+﻿using EngineeringCalculators.Web.Data;
+using EngineeringCalculators.Web.Models;
 using EngineeringCalculators.Web.Services.Contracts;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -23,17 +24,26 @@ namespace EngineeringCalculators.Web.Pages
         public required IMaterialService MaterialService { get; set; }
 
         [Inject]
+        public required EngineeringCalculatorsDb EngCalcDb { get; set; }
+
+        [Inject]
+        public required IMaterialndexedDbService MaterialIndexedDbService { get; set; }
+
+        [Inject]
         public required IJSRuntime _jSRuntime { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            if (MaterialService.FileHandle is not null)
-            {
-                _materials = await MaterialService.GetAllMemoryAsync();
-                _filteredMaterial = _materials;
-                SortMaterialByName();
-                GetCategories();
-            }
+            //if (MaterialService.FileHandle is not null)
+            //{
+            //    _materials = await MaterialService.GetAllMemoryAsync();
+            //    _filteredMaterial = _materials;
+            //    SortMaterialByName();
+            //    GetCategories();
+            //}
+
+            await EngCalcDb.OpenAsync();
+            await HandleLoadingMaterialAsync();
         }
 
         private void HandleSelectedMaterial(MaterialModel material)
@@ -41,11 +51,13 @@ namespace EngineeringCalculators.Web.Pages
             _material = material;
             _canSave = false;
             _disabled = true;
+            _newMaterialErrorMessage = "";
         }
 
         private async Task HandleLoadingMaterialAsync()
         {
-            _materials = await MaterialService.GetAllAsync();
+            //_materials = await MaterialService.GetAllAsync();
+            _materials = await MaterialIndexedDbService.GetAllAsync();
             _filteredMaterial = _materials;
             SortMaterialByName();
             GetCategories();
@@ -56,6 +68,7 @@ namespace EngineeringCalculators.Web.Pages
             _material = new();
             _canSave = true;
             _disabled = false;
+            _newMaterialErrorMessage = "";
         }
 
         private async Task HandleDeleteAsync()
@@ -67,7 +80,8 @@ namespace EngineeringCalculators.Web.Pages
             {
                 _canDelete = true;
                 _materials.Remove(_material);
-                await HandleSaveAsync(_material);
+                await MaterialIndexedDbService.DeleteAsync(_material);
+                //await HandleSaveAsync(_material);
                 _material = new();
             }
             _canDelete = false;
@@ -94,16 +108,23 @@ namespace EngineeringCalculators.Web.Pages
                         material.Id = max + 1;
                     }
                     _materials.Add(material);
-                }
-
-                if (MaterialService.FileHandle is null)
-                {
-                    await MaterialService.SaveAllAsync(_materials);
+                    await MaterialIndexedDbService.AddAsync(material);
                 }
                 else
                 {
-                    await MaterialService.UpdateAsync(_materials);
+                    // Existing material - update
+                    await MaterialIndexedDbService.UpdateAsync(material);
                 }
+
+
+                //if (MaterialService.FileHandle is null)
+                //{
+                //    await MaterialService.SaveAllAsync(_materials);
+                //}
+                //else
+                //{
+                //    await MaterialService.UpdateAsync(_materials);
+                //}
 
                 _canSave = false;
                 _canSaveEdit = false;

@@ -1,2 +1,32 @@
 ﻿@page "/"
+@implements IAsyncDisposable
+@inject IJSRuntime JS
 
+<h1>Calling Javascript</h1>
+
+<button id="btn">Click Me!</button>
+
+@code{
+    private IJSObjectReference? module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/Home.razor.js");
+
+            await module.InvokeVoidAsync("addHandlers");
+        }
+
+
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (module is not null)
+        {
+            await module.DisposeAsync();
+        }
+    }
+    
+}
