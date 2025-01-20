@@ -17,8 +17,8 @@ builder.Services.AddSingleton<EngineeringCalculatorsDb>();
 
 builder.Services.AddFileSystemAccessService();
 
-// TODO: Look at removing and only use for backing up the indexeddb database
-builder.Services.AddScoped<IMaterialService, MaterialService>();
+// TODO: Look at removing and only use for backing up the indexedDb database
+builder.Services.AddTransient<IMaterialFileAccessService, MaterialFileAccessService>();
 builder.Services.AddTransient<IMaterialndexedDbService, MaterialndexedDbService>();
 
 await builder.Build().RunAsync();

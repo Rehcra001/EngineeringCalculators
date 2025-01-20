@@ -16,12 +16,8 @@ namespace EngineeringCalculators.Web.Pages
         private string _selectedCategory = "All";
         private bool _canSave = true;
         private bool _disabled = false;
-        private bool _canDelete = false;
         private bool _canSaveEdit = false;
         private string _newMaterialErrorMessage = "";
-
-        [Inject]
-        public required IMaterialService MaterialService { get; set; }
 
         [Inject]
         public required EngineeringCalculatorsDb EngCalcDb { get; set; }
@@ -34,14 +30,6 @@ namespace EngineeringCalculators.Web.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            //if (MaterialService.FileHandle is not null)
-            //{
-            //    _materials = await MaterialService.GetAllMemoryAsync();
-            //    _filteredMaterial = _materials;
-            //    SortMaterialByName();
-            //    GetCategories();
-            //}
-
             await EngCalcDb.OpenAsync();
             await HandleLoadingMaterialAsync();
         }
@@ -56,7 +44,6 @@ namespace EngineeringCalculators.Web.Pages
 
         private async Task HandleLoadingMaterialAsync()
         {
-            //_materials = await MaterialService.GetAllAsync();
             _materials = await MaterialIndexedDbService.GetAllAsync();
             _filteredMaterial = _materials;
             SortMaterialByName();
@@ -78,18 +65,15 @@ namespace EngineeringCalculators.Web.Pages
 
             if (confirmed)
             {
-                _canDelete = true;
                 _materials.Remove(_material);
-                await MaterialIndexedDbService.DeleteAsync(_material);
-                //await HandleSaveAsync(_material);
+                await MaterialIndexedDbService.DeleteAsync(_material.Id);
                 _material = new();
             }
-            _canDelete = false;
         }
 
         private async Task HandleSaveAsync(MaterialModel material)
         {
-            if (IsUniqueMaterial(material) || _canSaveEdit || _canDelete)
+            if (IsUniqueMaterial(material) || _canSaveEdit)
             {
                 if (String.IsNullOrWhiteSpace(material.Category))
                 {
@@ -115,16 +99,6 @@ namespace EngineeringCalculators.Web.Pages
                     // Existing material - update
                     await MaterialIndexedDbService.UpdateAsync(material);
                 }
-
-
-                //if (MaterialService.FileHandle is null)
-                //{
-                //    await MaterialService.SaveAllAsync(_materials);
-                //}
-                //else
-                //{
-                //    await MaterialService.UpdateAsync(_materials);
-                //}
 
                 _canSave = false;
                 _canSaveEdit = false;
@@ -202,7 +176,6 @@ namespace EngineeringCalculators.Web.Pages
 
         private void SortMaterialByCategoryThenName()
         {
-            //_filteredMaterial.Sort((x, y) => x.Category.CompareTo(y.Category));
             _filteredMaterial = _filteredMaterial.OrderBy(c => c.Category).ThenBy(n => n.Name).ToList();
         }
     }

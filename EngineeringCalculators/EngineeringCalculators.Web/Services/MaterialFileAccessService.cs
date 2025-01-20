@@ -1,5 +1,4 @@
 ﻿using EngineeringCalculators.Web.Models;
-using EngineeringCalculators.Web.Pages;
 using EngineeringCalculators.Web.Services.Contracts;
 using KristofferStrube.Blazor.FileSystem;
 using KristofferStrube.Blazor.FileSystemAccess;
@@ -7,7 +6,7 @@ using System.Text.Json;
 
 namespace EngineeringCalculators.Web.Services
 {
-    public class MaterialService : IMaterialService
+    public class MaterialFileAccessService : IMaterialFileAccessService
     {
         public FileSystemFileHandle? FileHandle { get; private set; } = null;
 
@@ -17,7 +16,7 @@ namespace EngineeringCalculators.Web.Services
         private PermissionState _readPermissionState;
         private PermissionState _writePermissionState;
 
-        public MaterialService(IFileSystemAccessService fileSystemAccessService)
+        public MaterialFileAccessService(IFileSystemAccessService fileSystemAccessService)
         {
             _fileSystemAccessService = fileSystemAccessService;
         }

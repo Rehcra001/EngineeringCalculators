@@ -23,9 +23,9 @@ namespace EngineeringCalculators.Web.Services
             await IndexedDb.Materials.PutAsync<MaterialModel>(material);
         }
 
-        public async Task DeleteAsync(MaterialModel material)
+        public async Task DeleteAsync(int id)
         {
-            int[] ids = [material.Id];
+            int[] ids = [id];
 
             await IndexedDb.Materials.BatchDeleteAsync<int>(ids);
         }

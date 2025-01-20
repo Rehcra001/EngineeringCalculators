@@ -3,7 +3,7 @@ using KristofferStrube.Blazor.FileSystem;
 
 namespace EngineeringCalculators.Web.Services.Contracts
 {
-    public interface IMaterialService
+    public interface IMaterialFileAccessService
     {
         FileSystemFileHandle? FileHandle { get; }
         Task<List<MaterialModel>> GetAllAsync();
