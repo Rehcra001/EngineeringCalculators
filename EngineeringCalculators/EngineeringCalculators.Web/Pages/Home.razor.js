@@ -4,5 +4,12 @@
 
 export function addHandlers() {
     const btn = document.getElementById("btn");
-    btn.addEventListener("click", alertUser);
+    btn.addEventListener("click", getDirectoryHandle);
 }
+
+export function getDirHandle() {
+    const dirHandle = window.showDirectoryPicker();
+    console.log(dirHandle);
+    return JSON.stringify(dirHandle);
+}
+

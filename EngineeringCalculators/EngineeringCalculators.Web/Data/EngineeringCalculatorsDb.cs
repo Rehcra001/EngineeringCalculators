@@ -15,4 +15,5 @@ namespace EngineeringCalculators.Web.Data
             Version = 1;
         }
     }
+
 }
