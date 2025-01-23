@@ -86,10 +86,10 @@ namespace EngineeringCalculators.Web.Services
 
             _backupDataFileHandle = await _backupDirectoryHandle!.GetFileHandleAsync(store.Name + ".json", fileOptions);
 
-            await GetData();
+            await GetStoreData();
         }
 
-        private async Task GetData()
+        private async Task GetStoreData()
         {
             foreach (IndexedDbObjectStore store in _engCalcDBObjectStores)
             {
