@@ -14,7 +14,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 //IndexedDb database
 builder.Services.AddSingleton<EngineeringCalculatorsDb>();
-builder.Services.AddSingleton<FolderAndFileHandlesDb>();
 
 builder.Services.AddFileSystemAccessService();
 
