@@ -7,9 +7,10 @@ export function addHandlers() {
     btn.addEventListener("click", getDirectoryHandle);
 }
 
-export function getDirHandle() {
-    const dirHandle = window.showDirectoryPicker();
+export async function getDirHandle() {
+    const dirHandle = await window.showDirectoryPicker();
+
     console.log(dirHandle);
-    return JSON.stringify(dirHandle);
+    return dirHandle;
 }
 

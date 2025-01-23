@@ -41,9 +41,9 @@ namespace EngineeringCalculators.Web.Services
 
             await GetFolderHandleAsync();
 
-            await RequestReadWritePermissionAsync();
+            //await RequestReadWritePermissionAsync();
 
-            await GetFileHandlesAsync();
+            //await GetFileHandlesAsync();
 
             
 
@@ -83,16 +83,16 @@ namespace EngineeringCalculators.Web.Services
                         StartIn = WellKnownDirectory.Documents
                     };
 
-                    var fsOptions = new FileSystemOptions();
+                    //var fsOptions = new FileSystemOptions();
 
-                    var handle = await _fileSystemAccessService.ShowDirectoryPickerAsync(options);
+                    FileSystemDirectoryHandle handle = await _fileSystemAccessService.ShowDirectoryPickerAsync(options);
 
 
                     _backupDirectoryHandle = new FolderHandleModel()
                     {
                         Id = 1,
                         Name = "Backup",
-                        FolderHandle = handle
+                        FolderHandle = handle.JSReference
                     };
 
                     await SaveFolderHandleAsync();
@@ -174,7 +174,7 @@ namespace EngineeringCalculators.Web.Services
             {
                 Id = id,
                 Name = storeName,
-                FileHandle = await _backupDirectoryHandle.FolderHandle.GetFileHandleAsync(storeName + ".json", fileOptions)
+                //FileHandle = await _backupDirectoryHandle.FolderHandle.GetFileHandleAsync(storeName + ".json", fileOptions)
             };
 
             await SaveFileHandleAsync(handle);
@@ -193,19 +193,19 @@ namespace EngineeringCalculators.Web.Services
         }
 
 
-        private async Task RequestReadWritePermissionAsync()
-        {
-            if (_backupDirectoryHandle is not null)
-            {
-                _directoryHandleName = await _backupDirectoryHandle.FolderHandle.GetNameAsync();
-                _readWritePermissionState = await _backupDirectoryHandle.FolderHandle.QueryPermissionAsync(new() { Mode = FileSystemPermissionMode.ReadWrite });
+        //private async Task RequestReadWritePermissionAsync()
+        //{
+        //    if (_backupDirectoryHandle is not null)
+        //    {
+        //        _directoryHandleName = await _backupDirectoryHandle.FolderHandle.GetNameAsync();
+        //        _readWritePermissionState = await _backupDirectoryHandle.FolderHandle.QueryPermissionAsync(new() { Mode = FileSystemPermissionMode.ReadWrite });
 
-                if (_readWritePermissionState != 0)
-                {
-                    _readWritePermissionState = await _backupDirectoryHandle.FolderHandle.RequestPermissionAsync(new() { Mode = FileSystemPermissionMode.ReadWrite });
-                }
-            }
-        }
+        //        if (_readWritePermissionState != 0)
+        //        {
+        //            _readWritePermissionState = await _backupDirectoryHandle.FolderHandle.RequestPermissionAsync(new() { Mode = FileSystemPermissionMode.ReadWrite });
+        //        }
+        //    }
+        //}
 
         
     }

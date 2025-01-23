@@ -1,4 +1,5 @@
 ﻿using KristofferStrube.Blazor.FileSystem;
+using Microsoft.JSInterop;
 using System.ComponentModel.DataAnnotations;
 
 namespace EngineeringCalculators.Web.Models
@@ -7,6 +8,7 @@ namespace EngineeringCalculators.Web.Models
     {
         public int Id { get; set; }
         public string Name { get; set; } = "";
-        public FileSystemDirectoryHandle? FolderHandle { get; set; }
+
+        public IJSObjectReference? FolderHandle { get; set; }
     }
 }
