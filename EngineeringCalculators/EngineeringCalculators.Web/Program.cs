@@ -20,6 +20,6 @@ builder.Services.AddFileSystemAccessService();
 // TODO: Look at removing and only use for backing up the indexedDb database
 builder.Services.AddTransient<IMaterialFileAccessService, MaterialFileAccessService>();
 builder.Services.AddTransient<IMaterialndexedDbService, MaterialndexedDbService>();
-builder.Services.AddTransient<IBackupRestoreIndexedDbService, BackupRestoreIndexedDbService>();
+builder.Services.AddTransient<IBackupIndexedDbService, BackupIndexedDbService>();
 
 await builder.Build().RunAsync();

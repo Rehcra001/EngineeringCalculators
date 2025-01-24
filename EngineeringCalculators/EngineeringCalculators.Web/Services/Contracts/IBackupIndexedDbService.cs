@@ -1,7 +1,7 @@
 ﻿
 namespace EngineeringCalculators.Web.Services.Contracts
 {
-    public interface IBackupRestoreIndexedDbService
+    public interface IBackupIndexedDbService
     {
         Task BackupDatabaseAsync();
     }

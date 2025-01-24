@@ -8,7 +8,7 @@ using System.Text.Json;
 
 namespace EngineeringCalculators.Web.Services
 {
-    public class BackupRestoreIndexedDbService : IBackupRestoreIndexedDbService
+    public class BackupIndexedDbService : IBackupIndexedDbService
     {
         private readonly IFileSystemAccessService _fileSystemAccessService;
         private readonly EngineeringCalculatorsDb _EngCalcDb;
@@ -17,7 +17,7 @@ namespace EngineeringCalculators.Web.Services
         private FileSystemFileHandle? _backupDataFileHandle;
         private PermissionState _readWritePermissionState;
 
-        public BackupRestoreIndexedDbService(IFileSystemAccessService fileSystemAccessService,
+        public BackupIndexedDbService(IFileSystemAccessService fileSystemAccessService,
                                              EngineeringCalculatorsDb indexedDb)
         {
             _fileSystemAccessService = fileSystemAccessService;
