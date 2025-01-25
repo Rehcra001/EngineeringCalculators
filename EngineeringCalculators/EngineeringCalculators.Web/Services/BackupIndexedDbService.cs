@@ -29,7 +29,6 @@ namespace EngineeringCalculators.Web.Services
         {
             await _EngCalcDb.OpenAsync();
 
-
             GetObjectStores();
 
             await GetFolderHandleAsync();

@@ -1,9 +1,12 @@
-﻿using EngineeringCalculators.Web.Constants;
+﻿using CloudNimble.BlazorEssentials.IndexedDb;
+using EngineeringCalculators.Web.Constants;
+using EngineeringCalculators.Web.Data;
 using EngineeringCalculators.Web.Models;
 using EngineeringCalculators.Web.Services.Contracts;
 using KristofferStrube.Blazor.FileSystem;
 using KristofferStrube.Blazor.FileSystemAccess;
 using Microsoft.JSInterop;
+using System.Formats.Asn1;
 using System.Text.Json;
 
 namespace EngineeringCalculators.Web.Services
@@ -12,18 +15,27 @@ namespace EngineeringCalculators.Web.Services
     {
         private readonly IFileSystemAccessService _fileSystemAccessService;
         private readonly IJSRuntime _jsRuntime;
+        private readonly IIndexedDbService _indexedDbService;
+        private readonly EngineeringCalculatorsDb _engCalcDb;
         private FileSystemDirectoryHandle? _directoryHandle = null;
         private IFileSystemHandle[] _fileSystemHandles = [];
         private List<FileSystemFileHandle> _fileHandles = [];
 
-        public RestoreIndexedDbService(IFileSystemAccessService fileSystemAccessService, IJSRuntime jSRuntime)
+        public RestoreIndexedDbService(IFileSystemAccessService fileSystemAccessService,
+                                       IJSRuntime jSRuntime,
+                                       IIndexedDbService indexedDbService,
+                                       EngineeringCalculatorsDb engineeringCalculatorsDb)
         {
             _fileSystemAccessService = fileSystemAccessService;
             _jsRuntime = jSRuntime;
+            _indexedDbService = indexedDbService;
+            _engCalcDb = engineeringCalculatorsDb;
         }
 
         public async Task RestoreDatabaseAsync()
         {
+            await _engCalcDb.OpenAsync();
+
             await OpenBackupDirectoryAsync();
 
             if (_directoryHandle is not null)
@@ -87,19 +99,26 @@ namespace EngineeringCalculators.Web.Services
                     switch (fileName)
                     {
                         case BackupRestoreFilenameConstants.MaterialFile:
-                            List<MaterialModel> data = [];
+                            MaterialModel[] data = [];
                             DeserializeData(ref data, content);
-
+                            await RestoreDataAsync(data, IndexedDbStoreNameConstants.MaterialsStore);
                             break;
                     }
                 }
-                
+
             }
         }
 
-        private void  DeserializeData<T>(ref List<T> data, string content)
+        private void DeserializeData<T>(ref T[] data, string content)
         {
-            data = JsonSerializer.Deserialize<List<T>>(content)!;
+            data = JsonSerializer.Deserialize<T[]>(content)!;
+        }
+
+        private async Task RestoreDataAsync<T>(T[] data, string storeName) where T: class
+        {
+            await _indexedDbService.ClearStoreDataAsync(storeName);
+
+            await _indexedDbService.BatchAddAsync(data, storeName);
         }
     }
 }

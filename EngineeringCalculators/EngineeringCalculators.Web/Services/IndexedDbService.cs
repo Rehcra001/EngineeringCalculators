@@ -16,7 +16,7 @@ namespace EngineeringCalculators.Web.Services
             _indexedDbObjectStores = _engCalcDb.ObjectStores;
         }
 
-        private IndexedDbObjectStore? GetStore(string storeName)
+        public IndexedDbObjectStore? GetStore(string storeName)
         {
             IndexedDbObjectStore? store = null;
 
@@ -26,7 +26,6 @@ namespace EngineeringCalculators.Web.Services
             }
             return store;
         }
-
 
         public async Task AddAsync<T>(T data, string storeName) where T : class
         {
@@ -40,7 +39,20 @@ namespace EngineeringCalculators.Web.Services
             {
                 throw new Exception("Store Name Invalid");
             }
+        }
 
+        public async Task BatchAddAsync<T>(T[] data, string storeName) where T : class
+        {
+            IndexedDbObjectStore? store = GetStore(storeName);
+
+            if (store is not null)
+            {
+                await store.BatchAddAsync<T>(data);
+            }
+            else
+            {
+                throw new Exception("Store Name Invalid");
+            }
         }
 
         public async Task UpdateAsync<T>(T data, string storeName) where T : class
@@ -100,6 +112,22 @@ namespace EngineeringCalculators.Web.Services
                 throw new Exception("Store Name Invalid");
             }
         }
+
+        public async Task ClearStoreDataAsync(string storeName)
+        {
+            IndexedDbObjectStore? store = GetStore(storeName);
+
+            if (store is not null)
+            {
+                 await store.ClearStoreAsync();
+            }
+            else
+            {
+                throw new Exception("Store Name Invalid");
+            }
+        }
+
+        
     }
 
 }
