@@ -1,4 +1,5 @@
 ﻿using CloudNimble.BlazorEssentials.IndexedDb;
+using EngineeringCalculators.Web.Constants;
 using EngineeringCalculators.Web.Data;
 using EngineeringCalculators.Web.Models;
 using EngineeringCalculators.Web.Services.Contracts;
@@ -95,7 +96,7 @@ namespace EngineeringCalculators.Web.Services
             {
                 switch (store.Name)
                 {
-                    case "Materials":
+                    case IndexedDbStoreNameConstants.MaterialsStore:
                         List<MaterialModel> materials = await store.GetAllAsync<MaterialModel>();
                         await SaveDataAsync(materials);
                         break;
@@ -105,16 +106,20 @@ namespace EngineeringCalculators.Web.Services
 
         private async Task SaveDataAsync<T>(List<T> dataFile)
         {
-            var options = new JsonSerializerOptions();
-            options.WriteIndented = true;
-            string jsonMaterialsFile = JsonSerializer.Serialize<List<T>>(dataFile, options);
-
-            if (_backupDataFileHandle is not null)
+            if (dataFile is not null && dataFile.Count > 0)
             {
-                var writable = await _backupDataFileHandle.CreateWritableAsync();
-                await writable.WriteAsync(jsonMaterialsFile);
-                await writable.CloseAsync();
+                var options = new JsonSerializerOptions();
+                options.WriteIndented = true;
+                string jsonMaterialsFile = JsonSerializer.Serialize<List<T>>(dataFile, options);
+
+                if (_backupDataFileHandle is not null)
+                {
+                    var writable = await _backupDataFileHandle.CreateWritableAsync();
+                    await writable.WriteAsync(jsonMaterialsFile);
+                    await writable.CloseAsync();
+                }
             }
+            
         }
 
 

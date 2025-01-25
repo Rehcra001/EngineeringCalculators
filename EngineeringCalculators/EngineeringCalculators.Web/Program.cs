@@ -12,14 +12,14 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-//IndexedDb database
+//EngCalcDb database
 builder.Services.AddSingleton<EngineeringCalculatorsDb>();
 
 builder.Services.AddFileSystemAccessService();
 
-// TODO: Look at removing and only use for backing up the indexedDb database
-builder.Services.AddTransient<IMaterialFileAccessService, MaterialFileAccessService>();
-builder.Services.AddTransient<IMaterialndexedDbService, MaterialndexedDbService>();
+
+builder.Services.AddTransient<IIndexedDbService, IndexedDbService>();
 builder.Services.AddTransient<IBackupIndexedDbService, BackupIndexedDbService>();
+builder.Services.AddTransient<IRestoreIndexedDbService, RestoreIndexedDbService>();
 
 await builder.Build().RunAsync();

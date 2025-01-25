@@ -2,17 +2,22 @@
 @* @implements IAsyncDisposable *@
 @inject IJSRuntime JS
 @inject IBackupIndexedDbService BackupRestoreIndexedDbService
+@inject IRestoreIndexedDbService RestoreIndexedDbService
 
 <h1>Calling JavaScript</h1>
 
-<button @onclick="PrintStoreNames" id="bacuptBtn">Backup Data!</button>
-<button @onclick="PrintStoreNames" id="restoreBtn">Restore</button>
+<button @onclick="Backup" id="bacuptBtn">Backup Data!</button>
+<button @onclick="Restore" id="restoreBtn">Restore</button>
 
 @code{
 
-    private void PrintStoreNames()
+    private async Task Backup()
     {
-        BackupRestoreIndexedDbService.BackupDatabaseAsync();
+        await BackupRestoreIndexedDbService.BackupDatabaseAsync();
+    }
+
+    private async Task Restore(){
+        await RestoreIndexedDbService.RestoreDatabaseAsync();
     }
 
     // private IJSObjectReference? _module;

@@ -1,4 +1,5 @@
-﻿using EngineeringCalculators.Web.Data;
+﻿using EngineeringCalculators.Web.Constants;
+using EngineeringCalculators.Web.Data;
 using EngineeringCalculators.Web.Models;
 using EngineeringCalculators.Web.Services.Contracts;
 using Microsoft.AspNetCore.Components;
@@ -19,11 +20,14 @@ namespace EngineeringCalculators.Web.Pages
         private bool _canSaveEdit = false;
         private string _newMaterialErrorMessage = "";
 
+        private const string MATERIAL_STORE = IndexedDbStoreNameConstants.MaterialsStore;
+
         [Inject]
         public required EngineeringCalculatorsDb EngCalcDb { get; set; }
 
         [Inject]
-        public required IMaterialndexedDbService MaterialIndexedDbService { get; set; }
+        public required IIndexedDbService IndexedDbService { get; set; }
+
 
         [Inject]
         public required IJSRuntime _jSRuntime { get; set; }
@@ -44,7 +48,7 @@ namespace EngineeringCalculators.Web.Pages
 
         private async Task HandleLoadingMaterialAsync()
         {
-            _materials = await MaterialIndexedDbService.GetAllAsync();
+            _materials = await IndexedDbService.GetAllAsync<MaterialModel>(MATERIAL_STORE);
             _filteredMaterial = _materials;
             SortMaterialByName();
             GetCategories();
@@ -66,7 +70,7 @@ namespace EngineeringCalculators.Web.Pages
             if (confirmed)
             {
                 _materials.Remove(_material);
-                await MaterialIndexedDbService.DeleteAsync(_material.Id);
+                await IndexedDbService.DeleteAsync(_material.Id, MATERIAL_STORE);
                 _material = new();
             }
         }
@@ -92,12 +96,12 @@ namespace EngineeringCalculators.Web.Pages
                         material.Id = max + 1;
                     }
                     _materials.Add(material);
-                    await MaterialIndexedDbService.AddAsync(material);
+                    await IndexedDbService.AddAsync<MaterialModel>(material, MATERIAL_STORE);
                 }
                 else
                 {
                     // Existing material - update
-                    await MaterialIndexedDbService.UpdateAsync(material);
+                    await IndexedDbService.UpdateAsync<MaterialModel>(material, MATERIAL_STORE);
                 }
 
                 _canSave = false;
