@@ -4,15 +4,15 @@
 This SPA will contain a collection of various engineering calculators that
 will be added as I need them.
 
-The application will be able save any of the calculations to the clients local system and can be retrieved as needed.
+The application will be able save any of the data and calculations to the IndexedDb and can be retrieved as needed.
 
-File System API and File System Access API will be used to save and retrieve the calculations.
+File System API and File System Access API will be used to backup and restore IndexedDB.
 
-This will limit the client to using EDGE or Chrome browsers only. Firefox, Safari, Android os and Apple mobile os are not yet supported
+Backup and Restore of the IndexedDb Database will be limited to systems that support the File System Access API
 
 # Features Completed
 
-1: Material Database - As this is PWA SPA each user will need to add their own material
+1: Material Database 
 ![image](https://github.com/user-attachments/assets/e94f750e-996a-4617-a47a-d51acbcbe053)
 
 
