@@ -1,12 +1,10 @@
-﻿using CloudNimble.BlazorEssentials.IndexedDb;
-using EngineeringCalculators.Web.Constants;
+﻿using EngineeringCalculators.Web.Constants;
 using EngineeringCalculators.Web.Data;
 using EngineeringCalculators.Web.Models;
 using EngineeringCalculators.Web.Services.Contracts;
 using KristofferStrube.Blazor.FileSystem;
 using KristofferStrube.Blazor.FileSystemAccess;
 using Microsoft.JSInterop;
-using System.Formats.Asn1;
 using System.Text.Json;
 
 namespace EngineeringCalculators.Web.Services
@@ -17,6 +15,7 @@ namespace EngineeringCalculators.Web.Services
         private readonly IJSRuntime _jsRuntime;
         private readonly IIndexedDbService _indexedDbService;
         private readonly EngineeringCalculatorsDb _engCalcDb;
+        private readonly IEventService _eventService;
         private FileSystemDirectoryHandle? _directoryHandle = null;
         private IFileSystemHandle[] _fileSystemHandles = [];
         private List<FileSystemFileHandle> _fileHandles = [];
@@ -24,12 +23,14 @@ namespace EngineeringCalculators.Web.Services
         public RestoreIndexedDbService(IFileSystemAccessService fileSystemAccessService,
                                        IJSRuntime jSRuntime,
                                        IIndexedDbService indexedDbService,
-                                       EngineeringCalculatorsDb engineeringCalculatorsDb)
+                                       EngineeringCalculatorsDb engineeringCalculatorsDb,
+                                       IEventService eventService)
         {
             _fileSystemAccessService = fileSystemAccessService;
             _jsRuntime = jSRuntime;
             _indexedDbService = indexedDbService;
             _engCalcDb = engineeringCalculatorsDb;
+            _eventService = eventService;
         }
 
         public async Task RestoreDatabaseAsync()
@@ -119,6 +120,10 @@ namespace EngineeringCalculators.Web.Services
             await _indexedDbService.ClearStoreDataAsync(storeName);
 
             await _indexedDbService.BatchAddAsync(data, storeName);
+
+            _eventService.OnIndexedDbRestored();
+
         }
+
     }
 }
