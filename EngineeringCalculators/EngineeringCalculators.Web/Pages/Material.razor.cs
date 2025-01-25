@@ -7,7 +7,7 @@ using Microsoft.JSInterop;
 
 namespace EngineeringCalculators.Web.Pages
 {
-    public partial class Material
+    public partial class Material: IDisposable
     {
         private MaterialModel _material = new();
         private List<MaterialModel> _materials = [];
@@ -28,14 +28,23 @@ namespace EngineeringCalculators.Web.Pages
         [Inject]
         public required IIndexedDbService IndexedDbService { get; set; }
 
+        [Inject]
+        public required IJSRuntime JSRuntime { get; set; }
 
         [Inject]
-        public required IJSRuntime _jSRuntime { get; set; }
-
+        public required IEventService EventService { get; set; }
+        
         protected override async Task OnInitializedAsync()
         {
             await EngCalcDb.OpenAsync();
             await HandleLoadingMaterialAsync();
+            EventService.IndexedDbRestored += OnDatabaseRestored;
+        }
+
+        async void OnDatabaseRestored()
+        {
+            await InvokeAsync(HandleLoadingMaterialAsync);
+            await InvokeAsync(StateHasChanged);
         }
 
         private void HandleSelectedMaterial(MaterialModel material)
@@ -65,7 +74,7 @@ namespace EngineeringCalculators.Web.Pages
         private async Task HandleDeleteAsync()
         {
             string message = "Are you sure you want to delete this material?";
-            bool confirmed = await _jSRuntime.InvokeAsync<bool>("confirm", message);
+            bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", message);
 
             if (confirmed)
             {
@@ -181,6 +190,11 @@ namespace EngineeringCalculators.Web.Pages
         private void SortMaterialByCategoryThenName()
         {
             _filteredMaterial = _filteredMaterial.OrderBy(c => c.Category).ThenBy(n => n.Name).ToList();
+        }
+
+        public void Dispose()
+        {
+            EventService.IndexedDbRestored -= OnDatabaseRestored;
         }
     }
 

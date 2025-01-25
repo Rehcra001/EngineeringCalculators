@@ -15,9 +15,9 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 //EngCalcDb database
 builder.Services.AddSingleton<EngineeringCalculatorsDb>();
 
+builder.Services.AddScoped<IEventService, EventService>();
+
 builder.Services.AddFileSystemAccessService();
-
-
 builder.Services.AddTransient<IIndexedDbService, IndexedDbService>();
 builder.Services.AddTransient<IBackupIndexedDbService, BackupIndexedDbService>();
 builder.Services.AddTransient<IRestoreIndexedDbService, RestoreIndexedDbService>();
