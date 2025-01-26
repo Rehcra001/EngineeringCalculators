@@ -5,6 +5,7 @@ using EngineeringCalculators.Web.Models;
 using EngineeringCalculators.Web.Services.Contracts;
 using KristofferStrube.Blazor.FileSystem;
 using KristofferStrube.Blazor.FileSystemAccess;
+using Microsoft.JSInterop;
 using System.Text.Json;
 
 namespace EngineeringCalculators.Web.Services
@@ -13,16 +14,20 @@ namespace EngineeringCalculators.Web.Services
     {
         private readonly IFileSystemAccessService _fileSystemAccessService;
         private readonly EngineeringCalculatorsDb _EngCalcDb;
+        private readonly IJSRuntime _jsRuntime;
         private List<IndexedDbObjectStore> _engCalcDBObjectStores = [];
         private FileSystemDirectoryHandle? _backupDirectoryHandle;
         private FileSystemFileHandle? _backupDataFileHandle;
         private PermissionState _readWritePermissionState;
+        private bool _folderSelected = false;
 
         public BackupIndexedDbService(IFileSystemAccessService fileSystemAccessService,
-                                             EngineeringCalculatorsDb indexedDb)
+                                             EngineeringCalculatorsDb indexedDb,
+                                             IJSRuntime jSRuntime)
         {
             _fileSystemAccessService = fileSystemAccessService;
             _EngCalcDb = indexedDb;
+            _jsRuntime = jSRuntime;
         }
 
         public async Task BackupDatabaseAsync()
@@ -33,9 +38,13 @@ namespace EngineeringCalculators.Web.Services
 
             await GetFolderHandleAsync();
 
-            await RequestReadWritePermissionAsync();
+            if (_folderSelected)
+            {
+                await RequestReadWritePermissionAsync();
 
-            await GenerateFileHandlesAsync();
+                await GenerateFileHandlesAsync();
+            }
+            
         }
 
         private void GetObjectStores()
@@ -57,12 +66,12 @@ namespace EngineeringCalculators.Web.Services
                 var fsOptions = new FileSystemOptions();
 
                 _backupDirectoryHandle = await _fileSystemAccessService.ShowDirectoryPickerAsync(options);
-                await RequestReadWritePermissionAsync();
+                _folderSelected = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                _folderSelected = false;
+                await _jsRuntime.InvokeVoidAsync("console.log", ex.Message);
             }
 
         }
