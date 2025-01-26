@@ -1,9 +1,14 @@
-﻿<div>
-    <div>
-        <button id="backup" @onclick="HandleBackup">Backup</button>        
+﻿<div class="row">
+    <h6 style="color: white; text-align:center; ">
+        Database Backup and Restore
+    </h6>
+</div>
+<div class="row" style="width:100%; margin:0">
+    <div class="col-6" style="text-align:center; width:50%">
+        <button class="btn btn-primary btn-sm" id="backup" @onclick="HandleBackup">Backup</button>        
     </div>
-    <div>
-        <button id="restore" @onclick="HandleRestore">Restore</button>
+    <div class="col-6" style="text-align:center">
+        <button class="btn btn-primary btn-sm" id="restore" @onclick="HandleRestore">Restore</button>
     </div>
 </div>
 

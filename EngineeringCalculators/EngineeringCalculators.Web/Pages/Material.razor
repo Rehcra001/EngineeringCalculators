@@ -15,11 +15,11 @@
 
 
                 <div class="row ps-3 pe-3">
-                    <div class="col-6" style="text-align:center">
-                        <button @onclick=(HandleLoadingMaterialAsync) type="button" class="btn btn-primary">Load Material</button>
-                    </div>
+                    @* <div class="col-6" style="text-align:center"> *@
+                    @*     <button @onclick=(HandleLoadingMaterialAsync) type="button" class="btn btn-primary">Load Material</button> *@
+                    @* </div> *@
                     <div class="col" style="text-align:center">
-                        <button @onclick=(HandleNewMaterial) type="button" class="btn btn-primary">New Material</button>
+                        <button @onclick=(HandleNewMaterial) type="button" class="btn btn-primary btn-sm">New Material</button>
                     </div>
                 </div>
 
@@ -100,8 +100,8 @@
                 @if (_material.Id > 0 && _canSave == false)
                 {
                     <div style="text-align:center; display: flex; justify-content:space-evenly; margin-top: 3px">
-                        <button @onclick="HandleEdit" type="button" class="btn btn-primary">Edit</button>
-                        <button @onclick="HandleDeleteAsync" type="button" class="btn btn-danger">Delete</button>
+                        <button @onclick="HandleEdit" type="button" class="btn btn-primary btn-sm">Edit</button>
+                        <button @onclick="HandleDeleteAsync" type="button" class="btn btn-danger btn-sm">Delete</button>
                     </div>
                 }
 

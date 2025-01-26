@@ -1,5 +1,5 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
+﻿<div class="top-row ps-3 navbar navbar-dark"  >
+    <div class="container-fluid" >
         <a class="navbar-brand" href="">Engineering Calculators</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
@@ -7,7 +7,7 @@
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass nav-scrollable" style="height:fit-content" @onclick="ToggleNavMenu">
     <nav class="nav flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -22,12 +22,12 @@
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="sheetmetal">
-                    <span class="bi bi-calculator align-bottom h4" aria-hidden="true"></span> Sheet Metal Calculators
-                
+                    <span class="bi bi-calculator align-bottom h4" aria-hidden="true"></span> Sheet Metal Calculators                
             </NavLink>
         </div>
     </nav>
 </div>
+
 
 @code {
     private bool collapseNavMenu = true;
